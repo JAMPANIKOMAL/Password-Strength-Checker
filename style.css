@@ -40,8 +40,8 @@ body.dark-mode {
 body.light-mode { background-color: var(--bg-light); color: var(--text-light); }
 .container { 
     max-width: 900px; /* Adjusted for a simpler app */
-    margin: auto; 
-    padding: 20px; 
+    margin: 0 auto; /* Center the container horizontally */
+    padding: 20px; /* Inner padding for content */
     flex-grow: 1; /* Allow container to grow */
     display: flex;
     flex-direction: column;
@@ -72,7 +72,6 @@ body.light-mode { background-color: var(--bg-light); color: var(--text-light); }
     gap: 15px; /* Space between toggle and info button */
     flex-wrap: wrap; 
 }
-/* Removed .control-group styles from header elements as per image */
 
 /* General Button Styles (for main action buttons) */
 .btn-main {
@@ -126,8 +125,10 @@ body.light-mode .btn-header {
 
 /* Info buttons - ensure consistent size and look */
 .info-button {
-    padding: 8px 12px; /* Consistent padding for all info buttons */
-    font-size: 0.9rem; /* Consistent font size for all info buttons */
+    /* Use btn-header as the base for all info buttons for consistent sizing */
+    /* Override padding and font-size to ensure consistency across all info buttons */
+    padding: 8px 12px; 
+    font-size: 0.9rem;
     min-width: 40px; /* Ensure minimum width for the 'i' button */
     text-align: center;
     display: flex;
@@ -135,10 +136,10 @@ body.light-mode .btn-header {
     justify-content: center;
     gap: 6px; /* Space for "Info" text if present */
 }
+/* This rule was causing inconsistency. By making advancedOptionsInfoBtn use btn-header,
+   it will automatically inherit the correct info-button styling. */
 .advanced-options-section .info-button {
-    padding: 10px 18px; /* Match btn-main padding for the 'i' button next to Advanced Options */
-    font-size: 1rem; /* Match btn-main font size */
-    min-width: unset; /* Override min-width if it's a larger button */
+    /* No specific overrides here, it should inherit from .btn-header and .info-button */
 }
 
 
@@ -372,8 +373,7 @@ body.light-mode .placeholder-text {
     gap: 10px; /* Space between buttons */
 }
 .advanced-options-section .info-button {
-    padding: 10px 18px; /* Match btn-main padding */
-    font-size: 1rem; /* Match btn-main font size */
+    /* Now inherits from .btn-header and .info-button directly */
 }
 
 
@@ -431,7 +431,6 @@ body.light-mode .char-type-group input[type="number"] {
         width: 100%;
         justify-content: space-between;
     }
-    /* Removed .control-group styles from header elements */
     .password-input-section {
         flex-direction: column;
     }

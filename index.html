@@ -65,7 +65,7 @@
 
         <div class="advanced-options-section">
             <button id="advancedOptionsBtn" class="btn-main btn-blue">⚙️ Advanced Options</button>
-            <button id="advancedOptionsInfoBtn" class="btn-main btn-blue info-button">ⓘ</button>
+            <button id="advancedOptionsInfoBtn" class="btn-header info-button">ⓘ</button>
         </div>
     </div>
 </div>
@@ -124,12 +124,12 @@
             <span class="close-button advanced-info-close-button">&times;</span>
         </div>
         <div class="modal-body">
-            <p>Customize password strength criteria:</p>
+            <p>Adjust password strength rules:</p>
             <ul>
-                <li><strong>Minimum Length:</strong> Set the shortest acceptable password length.</li>
-                <li><strong>Required Character Types:</strong> Specify the minimum count of uppercase, lowercase, numbers, and special characters.</li>
+                <li><strong>Min Length:</strong> Set the minimum number of characters required.</li>
+                <li><strong>Char Types:</strong> Define the minimum count for uppercase, lowercase, numbers, and special characters.</li>
             </ul>
-            <p>Changes apply instantly to password checks.</p>
+            <p>Rules apply immediately to your password checks.</p>
         </div>
     </div>
 </div>
@@ -271,7 +271,7 @@
                 label = 'Strength: Strong';
             } else if (score === 5) {
                 color = 'var(--green)';
-                label = 'Strength: Very Strong! �';
+                label = 'Strength: Very Strong! 💪';
             }
 
             strengthBar.css({
@@ -393,4 +393,3 @@
 </script>
 </body>
 </html>
-�
