@@ -2,6 +2,9 @@
 
 A simple, privacy-focused web app to help users create strong passwords by checking them against customizable criteria. All password analysis happens locally—your data is never sent or stored.
 
+[https://jampanikomal.github.io/Password-Strength-Checker/](https://jampanikomal.github.io/Password-Strength-Checker/)
+
+
 ## ✨ Features
 
 - Enter your password and click "Check Password" for analysis.
