@@ -69,18 +69,21 @@ body.light-mode { background-color: var(--bg-light); color: var(--text-light); }
     align-items: center; 
     gap: 20px; /* Spacing between toggle and info button */
     flex-wrap: wrap; 
-    /* margin-left: auto; This is handled by justify-content: space-between on .top-bar */
+    /* No margin-left: auto here, as the control-group will handle it */
 }
-/* Removed .control-group styling from here as it's no longer wrapping the header controls */
-/*
+
+/* Control Group for header elements */
 .control-group { 
+    display: flex; /* Ensure elements inside are flexed */
+    align-items: center;
+    gap: 15px; /* Spacing between toggle and info button */
     padding: 8px; 
     background-color: var(--card-dark); 
     border: 1px solid var(--border-dark); 
     border-radius: 8px; 
 }
 body.light-mode .control-group { background-color: var(--card-light); border-color: var(--border-light); }
-*/
+
 
 .control-group.actions button, .control-group.actions a {
     padding: 8px 12px; font-size: 0.9rem; font-weight: 600; border-radius: 6px; cursor: pointer; transition: all 0.2s; text-decoration: none; display: flex; align-items: center; gap: 6px;
