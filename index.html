@@ -14,7 +14,7 @@
 <div class="container">
     <div class="top-bar">
         <div class="logo-title">
-            <!-- Key Symbol SVG -->
+            <!-- Key Symbol SVG - Top Left Corner -->
             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="logo-icon">
                 <path d="M15 9L17.5 11.5M17.5 11.5L15 14M17.5 11.5H12.5M12.5 11.5C12.5 14.2614 10.2614 16.5 7.5 16.5C4.73858 16.5 2.5 14.2614 2.5 11.5C2.5 8.73858 4.73858 6.5 7.5 6.5C10.2614 6.5 12.5 8.73858 12.5 11.5ZM21.5 11.5C21.5 14.2614 19.2614 16.5 16.5 16.5C13.7386 16.5 11.5 14.2614 11.5 11.5C11.5 8.73858 13.7386 6.5 16.5 6.5C19.2614 6.5 21.5 8.73858 21.5 11.5Z" stroke="#58a6ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
@@ -32,7 +32,7 @@
                 <span>Dark</span>
             </div>
             <!-- Info Button -->
-            <button id="infoBtn" class="btn-header">ⓘ Info</button>
+            <button id="infoBtn" class="btn-header info-button">ⓘ Info</button>
         </div>
     </div>
 
@@ -124,12 +124,12 @@
             <span class="close-button advanced-info-close-button">&times;</span>
         </div>
         <div class="modal-body">
-            <p>The Advanced Options allow you to customize the criteria used to evaluate password strength. You can set:</p>
+            <p>Customize password strength criteria:</p>
             <ul>
-                <li><strong>Minimum Length:</strong> The shortest acceptable length for a password.</li>
-                <li><strong>Required Character Types:</strong> The minimum number of uppercase letters, lowercase letters, numbers, and special characters that must be present in the password.</li>
+                <li><strong>Minimum Length:</strong> Set the shortest acceptable password length.</li>
+                <li><strong>Required Character Types:</strong> Specify the minimum count of uppercase, lowercase, numbers, and special characters.</li>
             </ul>
-            <p>Adjust these settings to match your specific security requirements. Changes made here will immediately affect how passwords are checked.</p>
+            <p>Changes apply instantly to password checks.</p>
         </div>
     </div>
 </div>
@@ -271,7 +271,7 @@
                 label = 'Strength: Strong';
             } else if (score === 5) {
                 color = 'var(--green)';
-                label = 'Strength: Very Strong! 💪';
+                label = 'Strength: Very Strong! �';
             }
 
             strengthBar.css({
@@ -393,3 +393,4 @@
 </script>
 </body>
 </html>
+�

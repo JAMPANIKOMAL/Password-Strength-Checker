@@ -124,6 +124,23 @@ body.light-mode .btn-header {
     border-color: var(--primary);
 }
 
+/* Info buttons - ensure consistent size and look */
+.info-button {
+    padding: 8px 12px; /* Consistent padding for all info buttons */
+    font-size: 0.9rem; /* Consistent font size for all info buttons */
+    min-width: 40px; /* Ensure minimum width for the 'i' button */
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px; /* Space for "Info" text if present */
+}
+.advanced-options-section .info-button {
+    padding: 10px 18px; /* Match btn-main padding for the 'i' button next to Advanced Options */
+    font-size: 1rem; /* Match btn-main font size */
+    min-width: unset; /* Override min-width if it's a larger button */
+}
+
 
 /* Apply button within modals */
 .btn-apply {
