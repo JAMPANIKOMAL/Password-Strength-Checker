@@ -1,104 +1,79 @@
 # Password Strength Checker
 
-A simple, client-side web application designed to help users create strong and secure passwords by evaluating them against customizable criteria. This tool prioritizes privacy, as no password data is ever stored or transmitted.
+A simple, privacy-focused web app to help users create strong passwords by checking them against customizable criteria. All password analysis happens locally—your data is never sent or stored.
 
 ## ✨ Features
 
-* **Real-time Strength Feedback:** Get instant feedback on your password's strength as you type.
-
-* **Customizable Rules:** Define your own password criteria, including:
-
-    * Minimum overall length.
-
-    * Minimum number of uppercase letters.
-
-    * Minimum number of lowercase letters.
-
-    * Minimum number of digits.
-
-    * Minimum number of special characters.
-
-* **Privacy-Focused:** All password checking logic runs directly in your browser. Your password is **never** sent to a server or stored anywhere.
-
-* **Password Visibility Toggle:** Easily show or hide your entered password with an eye icon.
-
-* **Dynamic Strength Bar:** A visual indicator that updates in real-time to reflect your password's compliance with the set rules.
-
-* **Informative Feedback:** Clear messages indicate which rules your password meets or fails.
-
-* **Light/Dark Theme:** Switch between light and dark modes for comfortable viewing.
-
-* **Responsive Design:** Optimized for various screen sizes, from mobile to desktop.
+- **Non-Real-time Feedback:** Enter your password and click "Check Password" for analysis.
+- **Animated Rule Display:** Rules are checked and shown one by one with smooth animation; the strength bar updates progressively.
+- **Customizable Rules:** Set requirements for:
+    - Minimum length
+    - Uppercase letters
+    - Lowercase letters
+    - Digits
+    - Special characters
+- **Privacy-Focused:** All logic runs in your browser; passwords are never transmitted or stored.
+- **Password Visibility Toggle:** Show/hide your password with an eye icon (visible by default).
+- **Dynamic Strength Bar:** Visual indicator updates as rules are checked.
+- **Informative Feedback:** See which rules your password meets or fails.
+- **Light/Dark Theme:** Switch between themes for comfortable viewing.
+- **Responsive Design:** Works on mobile and desktop.
 
 ## 🚀 Technologies Used
 
-* **HTML5:** For the basic structure of the web page.
-
-* **CSS3:** For styling and layout, maintaining a clean and modern aesthetic.
-
-* **JavaScript (jQuery):** For interactive elements, real-time password analysis, and dynamic UI updates.
+- **HTML5:** Page structure
+- **CSS3:** Styling and layout
+- **JavaScript (jQuery):** Interactivity, analysis, and UI updates
 
 ## 📦 Installation and Setup
 
-This is a client-side application, so setting it up is straightforward.
+1. **Clone the Repository:**
+     ```sh
+     git clone https://github.com/YOUR_USERNAME/Password-Strength-Checker.git
+     cd Password-Strength-Checker
+     ```
+     *(Replace `YOUR_USERNAME` with your GitHub username)*
 
-1.  **Clone the Repository:**
-    ```bash
-    git clone [https://github.com/YOUR_USERNAME/Password-Strength-Checker.git](https://github.com/YOUR_USERNAME/Password-Strength-Checker.git)
-    cd Password-Strength-Checker
-    ```
-    (Replace `YOUR_USERNAME` with your actual GitHub username).
+2. **Download jQuery:**
+     - Get [jquery-3.7.0.min.js](https://code.jquery.com/jquery-3.7.0.min.js) and save it in your project folder.
 
-2.  **Download jQuery:**
-    Download the minified jQuery 3.x version from its official CDN:
-    `https://code.jquery.com/jquery-3.7.0.min.js`
-    Save this file as `jquery-3.7.0.min.js` directly into your `Password-Strength-Checker` project folder (the same folder as `index.html` and `style.css`).
+3. **Run Locally:**
+     - Open `index.html` in your browser, or use a local server for best results.
 
-3.  **Run Locally:**
-    You can open `index.html` directly in your web browser, but for best performance and to avoid browser security restrictions, it's recommended to use a local web server.
+     **Using VS Code Live Server:**
+     - Install the "Live Server" extension, right-click `index.html`, and select "Open with Live Server."
 
-    * **Using VS Code Live Server Extension (Recommended):**
-        If you use VS Code, install the "Live Server" extension. Right-click on `index.html` in the explorer and select "Open with Live Server."
-
-    * **Using Python's Simple HTTP Server:**
-        Navigate to your project directory in your terminal and run:
-        ```bash
-        python -m http.server 8000
-        ```
-        Then, open your web browser and go to `http://localhost:8000/`.
+     **Using Python HTTP Server:**
+     ```sh
+     python -m http.server 8000
+     ```
+     - Visit [http://localhost:8000/](http://localhost:8000/) in your browser.
 
 ## 💡 Usage
 
-1.  **Enter Your Password:** Type your desired password into the "Enter your password" input field. The strength analysis will update in real-time.
+- **Enter Password:** Type your password in the input field.
+- **Toggle Visibility:** Click the eye icon to show/hide your password.
+- **Check Password:** Click "Check Password" to analyze strength.
+- **Strength Bar:** View the colored bar and label for password strength.
+- **View Results:** See which rules are met (✔️) or failed (❌).
+- **Theme Toggle:** Switch between light and dark modes.
+- **About:** Click "ⓘ Info" for privacy and app details.
 
-2.  **Toggle Visibility:** Click the eye icon next to the password input to show or hide the characters.
-
-3.  **Check Password:** Click the "Check Password" button to manually trigger the strength analysis.
-
-4.  **Strength Bar:** Observe the colored bar and label below the input field, which visually represent the password's strength based on the rules.
-
-5.  **View Results:** Below the strength bar, you'll see a detailed list of checks, indicating whether your password meets each requirement with a ✔️ or ❌.
-
-6.  **Theme Toggle:** Use the "Light" / "Dark" toggle in the top-right corner to switch between themes.
-
-7.  **About This Tool:** Click the "ⓘ Info" button in the top-right for information about the application's privacy and functionality.
-
-8.  **Advanced Options:**
-
-    * Click the "⚙️ Advanced Options" button to open a modal where you can customize the password strength rules.
-
-    * Adjust the "Minimum Length" and the minimum counts for "Uppercase Letters," "Lowercase Letters," "Numbers," and "Special Characters."
-
-    * Set a value of `0` for any character type if you do not wish to enforce that specific requirement.
-
-    * Click "Apply" for minimum length or "Apply Character Rules" to save your custom settings.
-
-    * Click the "ⓘ Info" button next to "Advanced Options" for an explanation of these customizable rules.
+**Advanced Options:**
+- Click "⚙️ Advanced Options" to customize rules.
+- Adjust minimum length and character type requirements.
+- Set any value to 0 to disable a rule.
+- Click "Apply" to save changes.
+- "ⓘ Info" next to Advanced Options explains each rule.
 
 ## 🤝 Contributing
 
-Feel free to fork this repository, open issues, or submit pull requests if you have suggestions for improvements or new features!
+Fork, open issues, or submit pull requests for improvements or new features!
+
+## 🤖 AI Assistance
+
+Developed with help from an AI model to enhance features and UI.
 
 ## 📄 License
 
-This project is open source and available under the [MIT License](https://www.google.com/search?q=LICENSE).
+Open source under the MIT License.
