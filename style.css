@@ -94,6 +94,9 @@ body.light-mode .btn-main {
     transform: translateY(-2px); /* Lift effect */
     filter: brightness(1.1);
 }
+.btn-main:active {
+    animation: buttonPress 0.2s ease-in-out;
+}
 
 /* Specific button colors */
 .btn-green { background-color: var(--green); }
@@ -121,6 +124,9 @@ body.light-mode .btn-header {
     background-color: var(--primary); /* Primary blue on hover */
     color: white;
     border-color: var(--primary);
+}
+.btn-header:active {
+    animation: buttonPress 0.2s ease-in-out;
 }
 
 /* Info buttons - ensure consistent size and look */
@@ -158,6 +164,9 @@ body.light-mode .btn-header {
 .btn-apply:hover {
     transform: scale(1.05);
     filter: brightness(1.1);
+}
+.btn-apply:active {
+    animation: buttonPress 0.2s ease-in-out;
 }
 
 
