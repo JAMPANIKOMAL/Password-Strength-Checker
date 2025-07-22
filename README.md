@@ -4,7 +4,7 @@ A simple, privacy-focused web app to help users create strong passwords by check
 
 ## ✨ Features
 
-- **Non-Real-time Feedback:** Enter your password and click "Check Password" for analysis.
+- Enter your password and click "Check Password" for analysis.
 - **Animated Rule Display:** Rules are checked and shown one by one with smooth animation; the strength bar updates progressively.
 - **Customizable Rules:** Set requirements for:
     - Minimum length
