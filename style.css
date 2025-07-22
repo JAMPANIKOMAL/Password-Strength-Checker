@@ -372,7 +372,7 @@ body.light-mode .placeholder-text {
     border: none;
     box-shadow: 0 4px 8px var(--button-shadow-dark);
     color: white;
-    background-color: var(--blue); /* Ensure this is blue */
+    background-color: var(--blue);
 }
 
 body.light-mode .advanced-options-section .info-button {
@@ -452,34 +452,81 @@ body.light-mode .char-type-group input[type="number"] {
     .top-bar {
         flex-direction: column;
         align-items: flex-start;
+        gap: 15px; /* Adjusted gap for mobile */
+    }
+    .logo-title h1 {
+        font-size: 1.4rem; /* Smaller title on mobile */
     }
     .header-controls {
         width: 100%;
         justify-content: space-between;
+        gap: 10px; /* Adjusted gap for mobile */
     }
-    /* Removed .control-group styles from header elements */
+    .toggle-switch {
+        font-size: 0.85rem; /* Smaller font for toggle */
+    }
+    .btn-header {
+        padding: 6px 10px; /* Smaller padding for header buttons */
+        font-size: 0.8rem; /* Smaller font for header buttons */
+    }
     .password-input-section {
         flex-direction: column;
+        gap: 10px;
+        padding: 15px; /* Adjusted card padding for mobile */
     }
     #checkPasswordBtn {
         width: 100%;
+        padding: 10px 15px; /* Adjusted padding for button */
     }
     .advanced-options-section {
         flex-direction: column; /* Stack buttons on small screens */
         align-items: center;
+        gap: 10px; /* Adjusted gap for mobile */
     }
     .advanced-options-section button {
         width: 100%; /* Full width for stacked buttons */
         max-width: 250px; /* Limit individual button width */
+        padding: 10px 15px; /* Adjusted padding for buttons */
     }
     .char-type-group label {
-        flex-direction: column; /* Stack label text and input on small screens */
-        align-items: flex-start;
-        gap: 4px;
+        flex-direction: row; /* Keep row layout for labels in modals on smaller screens */
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        font-size: 0.9rem; /* Smaller font for labels */
     }
     .char-type-group input[type="number"] {
-        width: 100%; /* Make number input full width in stacked layout */
-        max-width: 100px; /* Or a reasonable max-width */
-        text-align: left; /* Align text left when wider */
+        width: 50px; /* Smaller width for number input */
+        padding: 4px 6px; /* Smaller padding for number input */
+        text-align: center; /* Keep text centered */
+    }
+    .modal-content {
+        margin: 5% auto;
+        padding: 20px;
+        border-radius: 12px;
+        width: 90%; /* Wider modal on mobile */
+    }
+    .modal-header {
+        padding-bottom: 10px;
+        margin-bottom: 15px;
+    }
+    .modal-header h2 {
+        font-size: 1.3rem; /* Smaller modal title */
+    }
+    .close-button {
+        font-size: 24px; /* Smaller close button */
+    }
+    .modal-body {
+        gap: 15px; /* Adjusted modal body gap */
+    }
+    .rule-section h3 {
+        font-size: 1.1rem; /* Smaller rule heading */
+    }
+    .input-group input {
+        padding: 8px 10px; /* Adjusted input padding */
+    }
+    .btn-apply {
+        padding: 6px 12px; /* Adjusted apply button padding */
     }
 }
+
