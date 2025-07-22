@@ -14,11 +14,9 @@
 <div class="container">
     <div class="top-bar">
         <div class="logo-title">
-            <!-- Reusing a simple SVG for consistency, can be replaced -->
+            <!-- Key Symbol SVG -->
             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="logo-icon">
-                <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#58a6ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M12 6V18" stroke="#58a6ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M6 12H18" stroke="#58a6ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M15 9L17.5 11.5M17.5 11.5L15 14M17.5 11.5H12.5M12.5 11.5C12.5 14.2614 10.2614 16.5 7.5 16.5C4.73858 16.5 2.5 14.2614 2.5 11.5C2.5 8.73858 4.73858 6.5 7.5 6.5C10.2614 6.5 12.5 8.73858 12.5 11.5ZM21.5 11.5C21.5 14.2614 19.2614 16.5 16.5 16.5C13.7386 16.5 11.5 14.2614 11.5 11.5C11.5 8.73858 13.7386 6.5 16.5 6.5C19.2614 6.5 21.5 8.73858 21.5 11.5Z" stroke="#58a6ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
             <h1 id="dashboardTitle">Password Strength Checker</h1>
         </div>
@@ -42,8 +40,24 @@
 
     <div class="main-content-area">
         <div class="password-input-section card">
-            <input type="password" id="passwordInput" placeholder="Enter your password">
+            <div class="input-with-icon">
+                <input type="password" id="passwordInput" placeholder="Enter your password">
+                <button id="togglePasswordVisibility" class="icon-btn">
+                    <!-- Eye icon SVG -->
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path id="eyeOpen" d="M2 12S6 4 12 4S22 12 22 12S18 20 12 20S2 12 2 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle id="eyeOpenCircle" cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path id="eyeClosed" style="display:none;" d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-5.4 0-9.94-7-9.94-7A9.01 9.01 0 0 1 8 6.06M2 2L22 2M11.58 3.58A10.07 10.07 0 0 1 12 4c5.4 0 9.94 7 9.94 7a9.01 9.01 0 0 1-1.25 1.72M16 16.01L8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <line id="eyeClosedLine" style="display:none;" x1="1" y1="1" x2="23" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
             <button id="checkPasswordBtn" class="btn-start">Check Password</button>
+        </div>
+
+        <div class="strength-bar-container card">
+            <div class="strength-bar" id="strengthBar"></div>
+            <div class="strength-label" id="strengthLabel">Strength: N/A</div>
         </div>
 
         <div id="passwordResults" class="password-results-section card">
@@ -147,46 +161,98 @@
             }
         });
 
-        // --- Password Checking Logic (Placeholder) ---
-        $('#checkPasswordBtn').on('click', function() {
+        // --- Password Visibility Toggle ---
+        $('#togglePasswordVisibility').on('click', function() {
+            const passwordInput = $('#passwordInput');
+            const eyeOpen = $('#eyeOpen, #eyeOpenCircle');
+            const eyeClosed = $('#eyeClosed, #eyeClosedLine');
+
+            if (passwordInput.attr('type') === 'password') {
+                passwordInput.attr('type', 'text');
+                eyeOpen.hide();
+                eyeClosed.show();
+            } else {
+                passwordInput.attr('type', 'password');
+                eyeOpen.show();
+                eyeClosed.hide();
+            }
+        });
+
+        // --- Password Checking Logic ---
+        let currentRules = {
+            minLength: 8,
+            requireUppercase: true,
+            requireLowercase: true,
+            requireNumbers: true,
+            requireSpecial: true
+        };
+
+        const updateStrengthBar = (score) => {
+            const strengthBar = $('#strengthBar');
+            const strengthLabel = $('#strengthLabel');
+            let width = (score / 5) * 100; // Assuming 5 checks for now
+            let color = 'var(--red)';
+            let label = 'Strength: Very Weak';
+
+            if (score === 0) {
+                width = 0;
+                label = 'Strength: N/A';
+            } else if (score === 1) {
+                color = 'var(--red)';
+                label = 'Strength: Weak';
+            } else if (score === 2) {
+                color = 'var(--orange)';
+                label = 'Strength: Fair';
+            } else if (score === 3) {
+                color = 'var(--primary)'; // Blue
+                label = 'Strength: Good';
+            } else if (score === 4) {
+                color = 'var(--green)';
+                label = 'Strength: Strong';
+            } else if (score === 5) {
+                color = 'var(--green)';
+                label = 'Strength: Very Strong! 💪';
+            }
+
+            strengthBar.css({
+                width: `${width}%`,
+                backgroundColor: color
+            });
+            strengthLabel.text(label);
+        };
+
+        const checkPasswordStrength = () => {
             const password = $('#passwordInput').val();
             const resultsDiv = $('#passwordResults');
             resultsDiv.empty(); // Clear previous results
 
             if (password.length === 0) {
-                resultsDiv.append('<p class="error-text">Please enter a password to check.</p>');
+                resultsDiv.append('<p class="placeholder-text">Enter a password and click "Check Password" to see the strength analysis.</p>');
+                updateStrengthBar(0); // Reset strength bar
                 return;
             }
 
-            // Default rules (these will be dynamic later)
-            const rules = {
-                minLength: 8,
-                requireUppercase: true,
-                requireLowercase: true,
-                requireNumbers: true,
-                requireSpecial: true
-            };
-
+            let passedChecksCount = 0;
             const checks = [
                 {
-                    name: `Minimum length of ${rules.minLength} characters`,
-                    check: (pwd) => pwd.length >= rules.minLength
+                    name: `Minimum length of ${currentRules.minLength} characters`,
+                    check: (pwd) => pwd.length >= currentRules.minLength
                 },
                 {
                     name: 'At least one uppercase letter (A-Z)',
-                    check: (pwd) => rules.requireUppercase ? /[A-Z]/.test(pwd) : true
+                    check: (pwd) => currentRules.requireUppercase ? /[A-Z]/.test(pwd) : true
                 },
                 {
                     name: 'At least one lowercase letter (a-z)',
-                    check: (pwd) => rules.requireLowercase ? /[a-z]/.test(pwd) : true
+                    check: (pwd) => currentRules.requireLowercase ? /[a-z]/.test(pwd) : true
                 },
                 {
                     name: 'At least one number (0-9)',
-                    check: (pwd) => rules.requireNumbers ? /[0-9]/.test(pwd) : true
+                    check: (pwd) => currentRules.requireNumbers ? /[0-9]/.test(pwd) : true
                 },
                 {
                     name: 'At least one special character (!@#$...)',
-                    check: (pwd) => rules.requireSpecial ? /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~` ]/.test(pwd) : true
+                    check: (pwd) => currentRules.requireSpecial ? /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~` ]/.test(pwd) : true
                 }
             ];
 
@@ -196,7 +262,9 @@
                 const icon = passed ? '✔️' : '❌';
                 const className = passed ? 'success-text' : 'error-text';
                 resultsDiv.append(`<p class="${className}">${icon} ${rule.name}</p>`);
-                if (!passed) {
+                if (passed) {
+                    passedChecksCount++;
+                } else {
                     allChecksPassed = false;
                 }
             });
@@ -206,24 +274,52 @@
             } else {
                 resultsDiv.prepend('<p class="overall-strength error-text">Password needs improvement. 😟</p>');
             }
-        });
+            updateStrengthBar(passedChecksCount);
+        };
 
-        // --- Advanced Options Logic (to be fully implemented) ---
-        // For now, these buttons will just log to console or show a message
+        $('#checkPasswordBtn').on('click', checkPasswordStrength);
+        $('#passwordInput').on('keyup', checkPasswordStrength); // Check on keyup for real-time feedback
+
+        // --- Advanced Options Logic ---
+        const loadAdvancedRules = () => {
+            $('#minLengthInput').val(currentRules.minLength);
+            $('#requireUppercase').prop('checked', currentRules.requireUppercase);
+            $('#requireLowercase').prop('checked', currentRules.requireLowercase);
+            $('#requireNumbers').prop('checked', currentRules.requireNumbers);
+            $('#requireSpecial').prop('checked', currentRules.requireSpecial);
+        };
+
         $('.apply-rule-btn').on('click', function() {
             const ruleType = $(this).data('rule');
-            const value = $(`#${ruleType}Input`).val();
-            alert(`Applying rule: ${ruleType} with value: ${value}. (Not yet fully implemented)`);
-            // In a real implementation, you'd update the 'rules' object and re-check the password.
+            if (ruleType === 'minLength') {
+                const value = parseInt($('#minLengthInput').val());
+                if (!isNaN(value) && value > 0) {
+                    currentRules.minLength = value;
+                    alert('Minimum length rule applied!');
+                } else {
+                    alert('Please enter a valid minimum length (a positive number).');
+                }
+            }
+            checkPasswordStrength(); // Re-check password with new rules
+            advancedOptionsModal.hide(); // Hide modal after applying
         });
 
         $('.apply-char-rules-btn').on('click', function() {
-            const requireUppercase = $('#requireUppercase').is(':checked');
-            const requireLowercase = $('#requireLowercase').is(':checked');
-            const requireNumbers = $('#requireNumbers').is(':checked');
-            const requireSpecial = $('#requireSpecial').is(':checked');
-            alert(`Applying character rules: U:${requireUppercase}, L:${requireLowercase}, N:${requireNumbers}, S:${requireSpecial}. (Not yet fully implemented)`);
-            // In a real implementation, you'd update the 'rules' object and re-check the password.
+            currentRules.requireUppercase = $('#requireUppercase').is(':checked');
+            currentRules.requireLowercase = $('#requireLowercase').is(':checked');
+            currentRules.requireNumbers = $('#requireNumbers').is(':checked');
+            currentRules.requireSpecial = $('#requireSpecial').is(':checked');
+            alert('Character type rules applied!');
+            checkPasswordStrength(); // Re-check password with new rules
+            advancedOptionsModal.hide(); // Hide modal after applying
         });
+
+        // Load rules when advanced options modal is opened
+        $('#advancedOptionsBtn').on('click', loadAdvancedRules);
+
+        // Initial check for empty password input
+        checkPasswordStrength();
     });
 </script>
+</body>
+</html>
