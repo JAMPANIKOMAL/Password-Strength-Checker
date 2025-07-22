@@ -45,14 +45,15 @@
     <div class="main-content-area">
         <div class="password-input-section card">
             <div class="input-with-icon">
-                <input type="password" id="passwordInput" placeholder="Enter your password">
+                <!-- Changed type to 'text' for default visibility -->
+                <input type="text" id="passwordInput" placeholder="Enter your password">
                 <button id="togglePasswordVisibility" class="icon-btn">
-                    <!-- Eye icon SVG -->
+                    <!-- Eye icon SVG - Initially show eyeClosed as password is visible -->
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path id="eyeOpen" d="M2 12S6 4 12 4S22 12 22 12S18 20 12 20S2 12 2 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <circle id="eyeOpenCircle" cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path id="eyeClosed" style="display:none;" d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-5.4 0-9.94-7-9.94-7A9.01 9.01 0 0 1 8 6.06M2 2L22 2M11.58 3.58A10.07 10.07 0 0 1 12 4c5.4 0 9.94 7 9.94 7a9.01 9.01 0 0 1-1.25 1.72M16 16.01L8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <line id="eyeClosedLine" style="display:none;" x1="1" y1="1" x2="23" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path id="eyeOpen" style="display:none;" d="M2 12S6 4 12 4S22 12 22 12S18 20 12 20S2 12 2 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle id="eyeOpenCircle" style="display:none;" cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path id="eyeClosed" d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-5.4 0-9.94-7-9.94-7A9.01 9.01 0 0 1 8 6.06M2 2L22 2M11.58 3.58A10.07 10.07 0 0 1 12 4c5.4 0 9.94 7 9.94 7a9.01 9.01 0 0 1-1.25 1.72M16 16.01L8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <line id="eyeClosedLine" x1="1" y1="1" x2="23" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 </button>
             </div>
