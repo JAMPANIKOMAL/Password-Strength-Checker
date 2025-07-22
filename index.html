@@ -22,7 +22,6 @@
         </div>
         
         <div class="header-controls">
-            <!-- These elements are now direct children of header-controls, without an extra 'control-group' wrapper -->
             <div class="toggle-switch">
                 <span>Light</span>
                 <label class="switch">
@@ -64,6 +63,7 @@
 
         <div class="advanced-options-section">
             <button id="advancedOptionsBtn" class="btn-secondary">⚙️ Advanced Options</button>
+            <button id="advancedOptionsInfoBtn" class="btn-secondary info-icon-btn">ⓘ</button>
         </div>
     </div>
 </div>
@@ -90,25 +90,51 @@
             <span class="close-button advanced-close-button">&times;</span>
         </div>
         <div class="modal-body">
-            <p>Customize the rules for your password here. (Functionality to be added)</p>
-            <!-- Example rule setting, will be dynamic -->
+            <p>Customize the minimum requirements for your password here. Set a value of 0 for any character type if you do not want to require it.</p>
+            
             <div class="rule-section">
                 <h3>Minimum Length</h3>
                 <div class="add-rule-form">
-                    <input type="number" id="minLengthInput" value="8" min="1">
+                    <input type="number" id="minLengthInput" value="8" min="0">
                     <button class="add-btn apply-rule-btn" data-rule="minLength">Apply</button>
                 </div>
             </div>
             <div class="rule-section">
-                <h3>Required Character Types</h3>
-                <div class="checkbox-group">
-                    <label><input type="checkbox" id="requireUppercase" checked> Uppercase Letters (A-Z)</label>
-                    <label><input type="checkbox" id="requireLowercase" checked> Lowercase Letters (a-z)</label>
-                    <label><input type="checkbox" id="requireNumbers" checked> Numbers (0-9)</label>
-                    <label><input type="checkbox" id="requireSpecial" checked> Special Characters (!@#$...)</label>
+                <h3>Required Character Counts</h3>
+                <div class="input-group-rules">
+                    <div class="rule-input-item">
+                        <label for="minUppercase">Uppercase Letters (A-Z):</label>
+                        <input type="number" id="minUppercase" value="1" min="0">
+                    </div>
+                    <div class="rule-input-item">
+                        <label for="minLowercase">Lowercase Letters (a-z):</label>
+                        <input type="number" id="minLowercase" value="1" min="0">
+                    </div>
+                    <div class="rule-input-item">
+                        <label for="minNumbers">Numbers (0-9):</label>
+                        <input type="number" id="minNumbers" value="1" min="0">
+                    </div>
+                    <div class="rule-input-item">
+                        <label for="minSpecial">Special Characters (!@#$...):</label>
+                        <input type="number" id="minSpecial" value="1" min="0">
+                    </div>
                 </div>
                 <button class="btn-start apply-char-rules-btn">Apply Character Rules</button>
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- Advanced Options Info Modal -->
+<div id="advancedOptionsInfoModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>About Advanced Options</h2>
+            <span class="close-button advanced-info-close-button">&times;</span>
+        </div>
+        <div class="modal-body">
+            <p>In Advanced Options, you can define custom rules for your password. This includes setting a minimum overall length and specifying the minimum number of uppercase letters, lowercase letters, numbers, and special characters required.</p>
+            <p>Set a value of 0 for any character type if you don't want to enforce that specific requirement.</p>
         </div>
     </div>
 </div>
@@ -142,11 +168,16 @@
         // --- Modals Logic ---
         const infoModal = $('#infoModal');
         const advancedOptionsModal = $('#advancedOptionsModal');
+        const advancedOptionsInfoModal = $('#advancedOptionsInfoModal'); // New modal
 
         $('#infoBtn').on('click', () => infoModal.show());
         $('.info-close-button').on('click', () => infoModal.hide());
+
         $('#advancedOptionsBtn').on('click', () => advancedOptionsModal.show());
         $('.advanced-close-button').on('click', () => advancedOptionsModal.hide());
+
+        $('#advancedOptionsInfoBtn').on('click', () => advancedOptionsInfoModal.show()); // New info button handler
+        $('.advanced-info-close-button').on('click', () => advancedOptionsInfoModal.hide()); // New info modal close handler
 
         // Close modals when clicking outside
         $(window).on('click', (event) => {
@@ -155,6 +186,9 @@
             }
             if ($(event.target).is(advancedOptionsModal)) {
                 advancedOptionsModal.hide();
+            }
+            if ($(event.target).is(advancedOptionsInfoModal)) { // New modal
+                advancedOptionsInfoModal.hide();
             }
         });
 
@@ -178,35 +212,42 @@
         // --- Password Checking Logic ---
         let currentRules = {
             minLength: 8,
-            requireUppercase: true,
-            requireLowercase: true,
-            requireNumbers: true,
-            requireSpecial: true
+            minUppercase: 1,
+            minLowercase: 1,
+            minNumbers: 1,
+            minSpecial: 1
         };
 
         const updateStrengthBar = (score) => {
             const strengthBar = $('#strengthBar');
             const strengthLabel = $('#strengthLabel');
-            let width = (score / 5) * 100; // Assuming 5 checks for now
-            let color = 'var(--red)';
-            let label = 'Strength: Very Weak';
+            // Calculate max possible score based on active rules
+            let maxScore = 0;
+            if (currentRules.minLength > 0) maxScore++;
+            if (currentRules.minUppercase > 0) maxScore++;
+            if (currentRules.minLowercase > 0) maxScore++;
+            if (currentRules.minNumbers > 0) maxScore++;
+            if (currentRules.minSpecial > 0) maxScore++;
 
-            if (score === 0) {
-                width = 0;
-                label = 'Strength: N/A';
-            } else if (score === 1) {
+            let width = (maxScore === 0) ? 0 : (score / maxScore) * 100; 
+            let color = 'var(--red)';
+            let label = 'Strength: N/A';
+
+            if (score === 0 && maxScore > 0) {
+                label = 'Strength: Very Weak';
+            } else if (score / maxScore <= 0.2) {
                 color = 'var(--red)';
                 label = 'Strength: Weak';
-            } else if (score === 2) {
+            } else if (score / maxScore <= 0.6) {
                 color = 'var(--orange)';
                 label = 'Strength: Fair';
-            } else if (score === 3) {
+            } else if (score / maxScore <= 0.8) {
                 color = 'var(--primary)'; // Blue
                 label = 'Strength: Good';
-            } else if (score === 4) {
+            } else if (score / maxScore < 1) {
                 color = 'var(--green)';
                 label = 'Strength: Strong';
-            } else if (score === 5) {
+            } else if (score === maxScore && maxScore > 0) {
                 color = 'var(--green)';
                 label = 'Strength: Very Strong! 💪';
             }
@@ -230,46 +271,62 @@
             }
 
             let passedChecksCount = 0;
+
+            // Character counters
+            let uppercaseCount = (password.match(/[A-Z]/g) || []).length;
+            let lowercaseCount = (password.match(/[a-z]/g) || []).length;
+            let numberCount = (password.match(/[0-9]/g) || []).length;
+            let specialCount = (password.match(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~` ]/g) || []).length;
+
             const checks = [
                 {
                     name: `Minimum length of ${currentRules.minLength} characters`,
-                    check: (pwd) => pwd.length >= currentRules.minLength
+                    check: (pwd) => pwd.length >= currentRules.minLength,
+                    active: currentRules.minLength > 0
                 },
                 {
-                    name: 'At least one uppercase letter (A-Z)',
-                    check: (pwd) => currentRules.requireUppercase ? /[A-Z]/.test(pwd) : true
+                    name: `At least ${currentRules.minUppercase} uppercase letter(s) (A-Z)`,
+                    check: () => uppercaseCount >= currentRules.minUppercase,
+                    active: currentRules.minUppercase > 0
                 },
                 {
-                    name: 'At least one lowercase letter (a-z)',
-                    check: (pwd) => currentRules.requireLowercase ? /[a-z]/.test(pwd) : true
+                    name: `At least ${currentRules.minLowercase} lowercase letter(s) (a-z)`,
+                    check: () => lowercaseCount >= currentRules.minLowercase,
+                    active: currentRules.minLowercase > 0
                 },
                 {
-                    name: 'At least one number (0-9)',
-                    check: (pwd) => currentRules.requireNumbers ? /[0-9]/.test(pwd) : true
+                    name: `At least ${currentRules.minNumbers} number(s) (0-9)`,
+                    check: () => numberCount >= currentRules.minNumbers,
+                    active: currentRules.minNumbers > 0
                 },
                 {
-                    name: 'At least one special character (!@#$...)',
-                    check: (pwd) => currentRules.requireSpecial ? /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~` ]/.test(pwd) : true
+                    name: `At least ${currentRules.minSpecial} special character(s) (!@#$...)`,
+                    check: () => specialCount >= currentRules.minSpecial,
+                    active: currentRules.minSpecial > 0
                 }
             ];
 
             let allChecksPassed = true;
             checks.forEach(rule => {
-                const passed = rule.check(password);
-                const icon = passed ? '✔️' : '❌';
-                const className = passed ? 'success-text' : 'error-text';
-                resultsDiv.append(`<p class="${className}">${icon} ${rule.name}</p>`);
-                if (passed) {
-                    passedChecksCount++;
-                } else {
-                    allChecksPassed = false;
+                if (rule.active) { // Only check if the rule is active (min count > 0)
+                    const passed = rule.check(password);
+                    const icon = passed ? '✔️' : '❌';
+                    const className = passed ? 'success-text' : 'error-text';
+                    resultsDiv.append(`<p class="${className}">${icon} ${rule.name}</p>`);
+                    if (passed) {
+                        passedChecksCount++;
+                    } else {
+                        allChecksPassed = false;
+                    }
                 }
             });
 
-            if (allChecksPassed) {
+            if (allChecksPassed && passedChecksCount > 0) { // Ensure at least one rule was active and passed
                 resultsDiv.prepend('<p class="overall-strength success-text">Password is Strong! 💪</p>');
+            } else if (passedChecksCount > 0) {
+                 resultsDiv.prepend('<p class="overall-strength error-text">Password needs improvement. 😟</p>');
             } else {
-                resultsDiv.prepend('<p class="overall-strength error-text">Password needs improvement. 😟</p>');
+                resultsDiv.prepend('<p class="overall-strength error-text">Password is Very Weak. 😟</p>');
             }
             updateStrengthBar(passedChecksCount);
         };
@@ -280,21 +337,21 @@
         // --- Advanced Options Logic ---
         const loadAdvancedRules = () => {
             $('#minLengthInput').val(currentRules.minLength);
-            $('#requireUppercase').prop('checked', currentRules.requireUppercase);
-            $('#requireLowercase').prop('checked', currentRules.requireLowercase);
-            $('#requireNumbers').prop('checked', currentRules.requireNumbers);
-            $('#requireSpecial').prop('checked', currentRules.requireSpecial);
+            $('#minUppercase').val(currentRules.minUppercase);
+            $('#minLowercase').val(currentRules.minLowercase);
+            $('#minNumbers').val(currentRules.minNumbers);
+            $('#minSpecial').val(currentRules.minSpecial);
         };
 
         $('.apply-rule-btn').on('click', function() {
             const ruleType = $(this).data('rule');
             if (ruleType === 'minLength') {
                 const value = parseInt($('#minLengthInput').val());
-                if (!isNaN(value) && value > 0) {
+                if (!isNaN(value) && value >= 0) { // Allow 0 for no min length
                     currentRules.minLength = value;
-                    alert('Minimum length rule applied!');
+                    // alert('Minimum length rule applied!'); // Removed alert for smoother UX
                 } else {
-                    alert('Please enter a valid minimum length (a positive number).');
+                    // alert('Please enter a valid minimum length (a non-negative number).'); // Removed alert
                 }
             }
             checkPasswordStrength(); // Re-check password with new rules
@@ -302,11 +359,11 @@
         });
 
         $('.apply-char-rules-btn').on('click', function() {
-            currentRules.requireUppercase = $('#requireUppercase').is(':checked');
-            currentRules.requireLowercase = $('#requireLowercase').is(':checked');
-            currentRules.requireNumbers = $('#requireNumbers').is(':checked');
-            currentRules.requireSpecial = $('#requireSpecial').is(':checked');
-            alert('Character type rules applied!');
+            currentRules.minUppercase = parseInt($('#minUppercase').val()) || 0;
+            currentRules.minLowercase = parseInt($('#minLowercase').val()) || 0;
+            currentRules.minNumbers = parseInt($('#minNumbers').val()) || 0;
+            currentRules.minSpecial = parseInt($('#minSpecial').val()) || 0;
+            // alert('Character type rules applied!'); // Removed alert
             checkPasswordStrength(); // Re-check password with new rules
             advancedOptionsModal.hide(); // Hide modal after applying
         });
