@@ -39,20 +39,20 @@ body.dark-mode {
 }
 body.light-mode { background-color: var(--bg-light); color: var(--text-light); }
 .container { 
-    max-width: 900px; /* Adjusted for a simpler app */
-    margin: auto; 
+    max-width: none; /* Remove max-width constraint */
+    margin: 0; /* Remove auto centering */
     padding: 20px; 
-    flex-grow: 1; /* Allow container to grow */
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
-    width: 100%; /* Ensure it takes full width on smaller screens */
-    box-sizing: border-box; /* Include padding in width */
+    width: 100%;
+    box-sizing: border-box;
 }
 
 /* === Top Bar & Controls === */
 .top-bar { 
     display: flex; 
-    justify-content: space-between; /* Distribute items to edges */
+    justify-content: flex-start; /* Changed from space-between */
     align-items: center; 
     flex-wrap: wrap; 
     gap: 20px; 
@@ -69,8 +69,9 @@ body.light-mode { background-color: var(--bg-light); color: var(--text-light); }
 .header-controls { 
     display: flex; 
     align-items: center; 
-    gap: 15px; /* Space between toggle and info button */
+    gap: 15px;
     flex-wrap: wrap; 
+    margin-left: auto; /* Push controls to the right */
 }
 /* Removed .control-group styles from header elements as per image */
 
@@ -188,7 +189,7 @@ body.light-mode .slider:before { background-color: var(--text-muted-light); }
     padding: 20px; 
     border-radius: 12px; 
     width: 100%;
-    max-width: 500px; /* Limit width for better readability */
+    max-width: 700px; /* Increased from 500px */
     box-sizing: border-box;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     box-shadow: 0 5px 15px var(--shadow-dark); /* Subtle card shadow */
@@ -348,15 +349,33 @@ body.light-mode .placeholder-text {
 
 .advanced-options-section {
     width: 100%;
-    max-width: 500px; /* Match card width */
+    max-width: 700px; /* Increased from 500px to match card width */
     text-align: center;
-    display: flex; /* Make buttons side-by-side */
+    display: flex;
     justify-content: center;
-    gap: 10px; /* Space between buttons */
+    gap: 10px;
 }
 .advanced-options-section .info-button {
     padding: 10px 18px; /* Match btn-main padding */
     font-size: 1rem; /* Match btn-main font size */
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    white-space: nowrap;
+    border: none;
+    box-shadow: 0 4px 8px var(--button-shadow-dark);
+    color: white;
+    background-color: var(--blue);
+}
+
+body.light-mode .advanced-options-section .info-button {
+    box-shadow: 0 4px 8px var(--button-shadow-light);
+}
+
+.advanced-options-section .info-button:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
 }
 
 
