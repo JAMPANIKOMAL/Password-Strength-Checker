@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Password Strength Checker</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Add any specific animations if needed */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body class="dark-mode">
+<div class="container">
+    <div class="top-bar">
+        <div class="logo-title">
+            <!-- Reusing a simple SVG for consistency, can be replaced -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="logo-icon">
+                <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#58a6ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M12 6V18" stroke="#58a6ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M6 12H18" stroke="#58a6ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <h1 id="dashboardTitle">Password Strength Checker</h1>
+        </div>
+        
+        <div class="header-controls">
+            <div class="control-group">
+                <div class="toggle-switch">
+                    <span>Light</span>
+                    <label class="switch">
+                        <input type="checkbox" id="themeToggle" checked>
+                        <span class="slider"></span>
+                    </label>
+                    <span>Dark</span>
+                </div>
+            </div>
+            <div class="control-group actions">
+                <button id="infoBtn" class="btn-secondary">ⓘ Info</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content-area">
+        <div class="password-input-section card">
+            <input type="password" id="passwordInput" placeholder="Enter your password">
+            <button id="checkPasswordBtn" class="btn-start">Check Password</button>
+        </div>
+
+        <div id="passwordResults" class="password-results-section card">
+            <!-- Results will be displayed here -->
+            <p class="placeholder-text">Enter a password and click "Check Password" to see the strength analysis.</p>
+        </div>
+
+        <div class="advanced-options-section">
+            <button id="advancedOptionsBtn" class="btn-secondary">⚙️ Advanced Options</button>
+        </div>
+    </div>
+</div>
+
+<!-- Info Modal -->
+<div id="infoModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>About This Tool</h2>
+            <span class="close-button info-close-button">&times;</span>
+        </div>
+        <div class="modal-body">
+            <p>This is a client-side password strength checker. Your password is **NOT** stored, transmitted, or saved anywhere. All checks are performed directly in your browser.</p>
+            <p>It helps you create strong passwords by evaluating them against a set of criteria.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Advanced Options Modal -->
+<div id="advancedOptionsModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Advanced Password Rules</h2>
+            <span class="close-button advanced-close-button">&times;</span>
+        </div>
+        <div class="modal-body">
+            <p>Customize the rules for your password here. (Functionality to be added)</p>
+            <!-- Example rule setting, will be dynamic -->
+            <div class="rule-section">
+                <h3>Minimum Length</h3>
+                <div class="add-rule-form">
+                    <input type="number" id="minLengthInput" value="8" min="1">
+                    <button class="add-btn apply-rule-btn" data-rule="minLength">Apply</button>
+                </div>
+            </div>
+            <div class="rule-section">
+                <h3>Required Character Types</h3>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" id="requireUppercase" checked> Uppercase Letters (A-Z)</label>
+                    <label><input type="checkbox" id="requireLowercase" checked> Lowercase Letters (a-z)</label>
+                    <label><input type="checkbox" id="requireNumbers" checked> Numbers (0-9)</label>
+                    <label><input type="checkbox" id="requireSpecial" checked> Special Characters (!@#$...)</label>
+                </div>
+                <button class="btn-start apply-char-rules-btn">Apply Character Rules</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // --- Theme Toggle Logic (reused from SIEM project) ---
+        const applyTheme = (theme) => {
+            $('body').removeClass('dark-mode light-mode').addClass(theme);
+            localStorage.setItem('theme', theme);
+        };
+
+        $('#themeToggle').on('change', function() {
+            if ($(this).is(':checked')) {
+                applyTheme('dark-mode');
+            } else {
+                applyTheme('light-mode');
+            }
+        });
+
+        // Set initial theme based on localStorage or default to dark
+        if (localStorage.getItem('theme') === 'light-mode') {
+            $('#themeToggle').prop('checked', false);
+            applyTheme('light-mode');
+        } else {
+            $('#themeToggle').prop('checked', true);
+            applyTheme('dark-mode');
+        }
+
+        // --- Modals Logic ---
+        const infoModal = $('#infoModal');
+        const advancedOptionsModal = $('#advancedOptionsModal');
+
+        $('#infoBtn').on('click', () => infoModal.show());
+        $('.info-close-button').on('click', () => infoModal.hide());
+        $('#advancedOptionsBtn').on('click', () => advancedOptionsModal.show());
+        $('.advanced-close-button').on('click', () => advancedOptionsModal.hide());
+
+        // Close modals when clicking outside
+        $(window).on('click', (event) => {
+            if ($(event.target).is(infoModal)) {
+                infoModal.hide();
+            }
+            if ($(event.target).is(advancedOptionsModal)) {
+                advancedOptionsModal.hide();
+            }
+        });
+
+        // --- Password Checking Logic (Placeholder) ---
+        $('#checkPasswordBtn').on('click', function() {
+            const password = $('#passwordInput').val();
+            const resultsDiv = $('#passwordResults');
+            resultsDiv.empty(); // Clear previous results
+
+            if (password.length === 0) {
+                resultsDiv.append('<p class="error-text">Please enter a password to check.</p>');
+                return;
+            }
+
+            // Default rules (these will be dynamic later)
+            const rules = {
+                minLength: 8,
+                requireUppercase: true,
+                requireLowercase: true,
+                requireNumbers: true,
+                requireSpecial: true
+            };
+
+            const checks = [
+                {
+                    name: `Minimum length of ${rules.minLength} characters`,
+                    check: (pwd) => pwd.length >= rules.minLength
+                },
+                {
+                    name: 'At least one uppercase letter (A-Z)',
+                    check: (pwd) => rules.requireUppercase ? /[A-Z]/.test(pwd) : true
+                },
+                {
+                    name: 'At least one lowercase letter (a-z)',
+                    check: (pwd) => rules.requireLowercase ? /[a-z]/.test(pwd) : true
+                },
+                {
+                    name: 'At least one number (0-9)',
+                    check: (pwd) => rules.requireNumbers ? /[0-9]/.test(pwd) : true
+                },
+                {
+                    name: 'At least one special character (!@#$...)',
+                    check: (pwd) => rules.requireSpecial ? /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~` ]/.test(pwd) : true
+                }
+            ];
+
+            let allChecksPassed = true;
+            checks.forEach(rule => {
+                const passed = rule.check(password);
+                const icon = passed ? '✔️' : '❌';
+                const className = passed ? 'success-text' : 'error-text';
+                resultsDiv.append(`<p class="${className}">${icon} ${rule.name}</p>`);
+                if (!passed) {
+                    allChecksPassed = false;
+                }
+            });
+
+            if (allChecksPassed) {
+                resultsDiv.prepend('<p class="overall-strength success-text">Password is Strong! 💪</p>');
+            } else {
+                resultsDiv.prepend('<p class="overall-strength error-text">Password needs improvement. 😟</p>');
+            }
+        });
+
+        // --- Advanced Options Logic (to be fully implemented) ---
+        // For now, these buttons will just log to console or show a message
+        $('.apply-rule-btn').on('click', function() {
+            const ruleType = $(this).data('rule');
+            const value = $(`#${ruleType}Input`).val();
+            alert(`Applying rule: ${ruleType} with value: ${value}. (Not yet fully implemented)`);
+            // In a real implementation, you'd update the 'rules' object and re-check the password.
+        });
+
+        $('.apply-char-rules-btn').on('click', function() {
+            const requireUppercase = $('#requireUppercase').is(':checked');
+            const requireLowercase = $('#requireLowercase').is(':checked');
+            const requireNumbers = $('#requireNumbers').is(':checked');
+            const requireSpecial = $('#requireSpecial').is(':checked');
+            alert(`Applying character rules: U:${requireUppercase}, L:${requireLowercase}, N:${requireNumbers}, S:${requireSpecial}. (Not yet fully implemented)`);
+            // In a real implementation, you'd update the 'rules' object and re-check the password.
+        });
+    });
+</script>
