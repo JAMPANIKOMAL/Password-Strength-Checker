@@ -6,9 +6,12 @@
     <title>Password Strength Checker</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Add any specific animations if needed */
+        /* Keyframe animations for subtle effects */
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        /* Animation for button click */
+        @keyframes slideInUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
         @keyframes buttonPress {
             0% { transform: scale(1); }
             50% { transform: scale(0.98); }
@@ -18,11 +21,11 @@
 </head>
 <body class="dark-mode">
 <div class="container">
-    <div class="top-bar">
+    <header class="top-bar">
         <div class="logo-title">
             <!-- Key Symbol SVG - Top Left Corner -->
             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="logo-icon">
-                <path d="M15 9L17.5 11.5M17.5 11.5L15 14M17.5 11.5H12.5M12.5 11.5C12.5 14.2614 10.2614 16.5 7.5 16.5C4.73858 16.5 2.5 14.2614 2.5 11.5C2.5 8.73858 4.73858 6.5 7.5 6.5C10.2614 6.5 12.5 8.73858 12.5 11.5ZM21.5 11.5C21.5 14.2614 19.2614 16.5 16.5 16.5C13.7386 16.5 11.5 14.2614 11.5 11.5C11.5 8.73858 13.7386 6.5 16.5 6.5C19.2614 6.5 21.5 8.73858 21.5 11.5Z" stroke="#58a6ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M15 9L17.5 11.5M17.5 11.5L15 14M17.5 11.5H12.5M12.5 11.5C12.5 14.2614 10.2614 16.5 7.5 16.5C4.73858 16.5 2.5 14.2614 2.5 11.5C2.5 8.73858 4.73858 6.5 7.5 6.5C10.2614 6.5 12.5 8.73858 12.5 11.5ZM21.5 11.5C21.5 14.2614 19.2614 16.5 16.5 16.5C13.7386 16.5 11.5 14.2614 11.5 11.5C11.5 8.73858 13.7386 6.5 16.5 6.5C19.2614 6.5 21.5 8.73858 21.5 11.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
             <h1 id="dashboardTitle">Password Strength Checker</h1>
         </div>
@@ -40,10 +43,10 @@
             <!-- Info Button -->
             <button id="infoBtn" class="btn-header info-button">ⓘ Info</button>
         </div>
-    </div>
+    </header>
 
-    <div class="main-content-area">
-        <div class="password-input-section card">
+    <main class="main-content-area">
+        <section class="password-input-section card">
             <div class="input-with-icon">
                 <input type="password" id="passwordInput" placeholder="Enter your password">
                 <button id="togglePasswordVisibility" class="icon-btn">
@@ -57,23 +60,23 @@
                 </button>
             </div>
             <button id="checkPasswordBtn" class="btn-main btn-green">Check Password</button>
-        </div>
+        </section>
 
-        <div class="strength-bar-container card">
+        <section class="strength-bar-container card">
             <div class="strength-bar" id="strengthBar"></div>
             <div class="strength-label" id="strengthLabel">Strength: N/A</div>
-        </div>
+        </section>
 
-        <div id="passwordResults" class="password-results-section card">
+        <section id="passwordResults" class="password-results-section card">
             <!-- Results will be displayed here -->
             <p class="placeholder-text">Enter a password and click "Check Password" to see the strength analysis.</p>
-        </div>
+        </section>
 
         <div class="advanced-options-section">
             <button id="advancedOptionsBtn" class="btn-main btn-blue">⚙️ Advanced Options</button>
             <button id="advancedOptionsInfoBtn" class="btn-header info-button">ⓘ</button>
         </div>
-    </div>
+    </main>
 </div>
 
 <!-- Info Modal -->
@@ -163,6 +166,13 @@
         const applyTheme = (theme) => {
             $('body').removeClass('dark-mode light-mode').addClass(theme);
             localStorage.setItem('theme', theme);
+            // Update SVG stroke color based on theme
+            const svgPath = $('.logo-icon path');
+            if (theme === 'dark-mode') {
+                svgPath.attr('stroke', '#58a6ff'); // Blue for dark mode
+            } else {
+                svgPath.attr('stroke', '#0969da'); // Darker blue for light mode
+            }
         };
 
         $('#themeToggle').on('change', function() {
