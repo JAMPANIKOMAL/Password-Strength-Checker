@@ -253,10 +253,10 @@
             requireSpecial: 1
         };
 
-        const updateStrengthBar = (score) => {
+        const updateStrengthBar = (score, totalChecks) => {
             const strengthBar = $('#strengthBar');
             const strengthLabel = $('#strengthLabel');
-            let width = (score / 5) * 100; // Assuming 5 checks for now
+            let width = (score / totalChecks) * 100; 
             let color = 'var(--red)';
             let label = 'Strength: N/A';
 
@@ -277,7 +277,7 @@
                 label = 'Strength: Strong';
             } else if (score === 5) {
                 color = 'var(--green)';
-                label = 'Strength: Very Strong! �';
+                label = 'Strength: Very Strong! 💪';
             }
 
             strengthBar.css({
@@ -294,52 +294,91 @@
 
             if (password.length === 0) {
                 resultsDiv.append('<p class="placeholder-text">Enter a password and click "Check Password" to see the strength analysis.</p>');
-                updateStrengthBar(0); // Reset strength bar
+                updateStrengthBar(0, 5); // Reset strength bar
                 return;
             }
 
             let passedChecksCount = 0;
+            const checks = [];
+
+            // Define all checks
+            checks.push({
+                name: 'Minimum Length',
+                rule: currentRules.minLength,
+                check: (pwd) => pwd.length >= currentRules.minLength,
+                message: (passed, count) => `${passed ? '✔️' : '❌'} Minimum length of ${currentRules.minLength} characters`
+            });
+
+            checks.push({
+                name: 'Uppercase Letters',
+                rule: currentRules.requireUppercase,
+                check: (pwd) => (pwd.match(/[A-Z]/g) || []).length >= currentRules.requireUppercase,
+                count: (pwd) => (pwd.match(/[A-Z]/g) || []).length,
+                message: (passed, count) => `${passed ? '✔️' : '❌'} At least ${currentRules.requireUppercase} uppercase letter(s) (found: ${count})`
+            });
+
+            checks.push({
+                name: 'Lowercase Letters',
+                rule: currentRules.requireLowercase,
+                check: (pwd) => (pwd.match(/[a-z]/g) || []).length >= currentRules.requireLowercase,
+                count: (pwd) => (pwd.match(/[a-z]/g) || []).length,
+                message: (passed, count) => `${passed ? '✔️' : '❌'} At least ${currentRules.requireLowercase} lowercase letter(s) (found: ${count})`
+            });
+
+            checks.push({
+                name: 'Numbers',
+                rule: currentRules.requireNumbers,
+                check: (pwd) => (pwd.match(/[0-9]/g) || []).length >= currentRules.requireNumbers,
+                count: (pwd) => (pwd.match(/[0-9]/g) || []).length,
+                message: (passed, count) => `${passed ? '✔️' : '❌'} At least ${currentRules.requireNumbers} number(s) (found: ${count})`
+            });
+
+            checks.push({
+                name: 'Special Characters',
+                rule: currentRules.requireSpecial,
+                check: (pwd) => (pwd.match(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~` ]/g) || []).length >= currentRules.requireSpecial,
+                count: (pwd) => (pwd.match(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~` ]/g) || []).length,
+                message: (passed, count) => `${passed ? '✔️' : '❌'} At least ${currentRules.requireSpecial} special character(s) (found: ${count})`
+            });
             
-            // Rule 1: Minimum Length
-            const minLengthPassed = password.length >= currentRules.minLength;
-            resultsDiv.append(`<p class="${minLengthPassed ? 'success-text' : 'error-text'}">${minLengthPassed ? '✔️' : '❌'} Minimum length of ${currentRules.minLength} characters</p>`);
-            if (minLengthPassed) passedChecksCount++;
+            // Initial state for strength bar and label
+            updateStrengthBar(0, checks.length);
+            $('#checkPasswordBtn').prop('disabled', true); // Disable button during check
 
-            // Rule 2: Uppercase Letters
-            const uppercaseCount = (password.match(/[A-Z]/g) || []).length;
-            const uppercasePassed = uppercaseCount >= currentRules.requireUppercase;
-            resultsDiv.append(`<p class="${uppercasePassed ? 'success-text' : 'error-text'}">${uppercasePassed ? '✔️' : '❌'} At least ${currentRules.requireUppercase} uppercase letter(s) (found: ${uppercaseCount})</p>`);
-            if (uppercasePassed) passedChecksCount++;
+            let currentCheckIndex = 0;
+            const animateCheck = () => {
+                if (currentCheckIndex < checks.length) {
+                    const check = checks[currentCheckIndex];
+                    const passed = check.check(password);
+                    const count = check.count ? check.count(password) : null; // Get count if available
+                    
+                    const pElement = $(`<p class="${passed ? 'success-text' : 'error-text'}"></p>`);
+                    pElement.text(check.message(passed, count));
+                    pElement.hide().appendTo(resultsDiv).fadeIn(300); // Fade in each result
 
-            // Rule 3: Lowercase Letters
-            const lowercaseCount = (password.match(/[a-z]/g) || []).length;
-            const lowercasePassed = lowercaseCount >= currentRules.requireLowercase;
-            resultsDiv.append(`<p class="${lowercasePassed ? 'success-text' : 'error-text'}">${lowercasePassed ? '✔️' : '❌'} At least ${currentRules.requireLowercase} lowercase letter(s) (found: ${lowercaseCount})</p>`);
-            if (lowercasePassed) passedChecksCount++;
+                    if (passed) {
+                        passedChecksCount++;
+                    }
+                    updateStrengthBar(passedChecksCount, checks.length);
 
-            // Rule 4: Numbers
-            const numberCount = (password.match(/[0-9]/g) || []).length;
-            const numbersPassed = numberCount >= currentRules.requireNumbers;
-            resultsDiv.append(`<p class="${numbersPassed ? 'success-text' : 'error-text'}">${numbersPassed ? '✔️' : '❌'} At least ${currentRules.requireNumbers} number(s) (found: ${numberCount})</p>`);
-            if (numbersPassed) passedChecksCount++;
+                    currentCheckIndex++;
+                    setTimeout(animateCheck, 400); // Delay for next check
+                } else {
+                    // All checks complete, show overall strength
+                    if (passedChecksCount === checks.length) {
+                        resultsDiv.prepend('<p class="overall-strength success-text">Password is Strong! 💪</p>');
+                    } else {
+                        resultsDiv.prepend('<p class="overall-strength error-text">Password needs improvement. 😟</p>');
+                    }
+                    $('#checkPasswordBtn').prop('disabled', false); // Re-enable button
+                }
+            };
 
-            // Rule 5: Special Characters
-            const specialCharCount = (password.match(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~` ]/g) || []).length;
-            const specialPassed = specialCharCount >= currentRules.requireSpecial;
-            resultsDiv.append(`<p class="${specialPassed ? 'success-text' : 'error-text'}">${specialPassed ? '✔️' : '❌'} At least ${currentRules.requireSpecial} special character(s) (found: ${specialCharCount})</p>`);
-            if (specialPassed) passedChecksCount++;
-
-
-            if (passedChecksCount === 5) { // All 5 core checks passed
-                resultsDiv.prepend('<p class="overall-strength success-text">Password is Strong! 💪</p>');
-            } else {
-                resultsDiv.prepend('<p class="overall-strength error-text">Password needs improvement. 😟</p>');
-            }
-            updateStrengthBar(passedChecksCount);
+            animateCheck(); // Start the animation
         };
 
         $('#checkPasswordBtn').on('click', checkPasswordStrength);
-        $('#passwordInput').on('keyup', checkPasswordStrength); // Check on keyup for real-time feedback
+        // Removed $('#passwordInput').on('keyup', checkPasswordStrength); for non-realtime feedback
 
         // --- Advanced Options Logic ---
         const loadAdvancedRules = () => {
@@ -350,18 +389,19 @@
             $('#requireSpecial').val(currentRules.requireSpecial);
         };
 
-        $('.btn-apply').on('click', function() { // Changed from .apply-rule-btn to .btn-apply
+        $('.btn-apply').on('click', function() {
             const ruleType = $(this).data('rule');
             if (ruleType === 'minLength') {
                 const value = parseInt($('#minLengthInput').val());
-                if (!isNaN(value) && value >= 1) { // Minimum length must be at least 1
+                if (!isNaN(value) && value >= 1) {
                     currentRules.minLength = value;
                     showAlert('Rule Applied', `Minimum length rule applied: ${value} characters.`);
                 } else {
                     showAlert('Invalid Input', 'Please enter a valid minimum length (a positive number).');
                 }
             }
-            checkPasswordStrength(); // Re-check password with new rules
+            // Do not re-check password strength immediately after applying rules
+            // The user will click "Check Password" again.
             advancedOptionsModal.hide(); // Hide modal after applying
         });
 
@@ -386,7 +426,8 @@
             } else {
                 showAlert('Invalid Input', 'Please enter valid non-negative numbers for all character type rules.');
             }
-            checkPasswordStrength(); // Re-check password with new rules
+            // Do not re-check password strength immediately after applying rules
+            // The user will click "Check Password" again.
             advancedOptionsModal.hide(); // Hide modal after applying
         });
 
@@ -394,7 +435,8 @@
         $('#advancedOptionsBtn').on('click', loadAdvancedRules);
 
         // Initial check for empty password input
-        checkPasswordStrength();
+        // This will display the placeholder text correctly on load
+        checkPasswordStrength(); 
     });
 </script>
 </body>
