@@ -63,12 +63,14 @@
             <button id="checkPasswordBtn" class="btn-main btn-green">Check Password</button>
         </div>
 
-        <div class="strength-bar-container card">
+        <!-- Added style="display: none;" to hide initially -->
+        <div class="strength-bar-container card" style="display: none;">
             <div class="strength-bar" id="strengthBar"></div>
             <div class="strength-label" id="strengthLabel">Strength: N/A</div>
         </div>
 
-        <div id="passwordResults" class="password-results-section card">
+        <!-- Added style="display: none;" to hide initially -->
+        <div id="passwordResults" class="password-results-section card" style="display: none;">
             <!-- Results will be displayed here -->
             <p class="placeholder-text">Enter a password and click "Check Password" to see the strength analysis.</p>
         </div>
@@ -281,7 +283,7 @@
                 label = 'Strength: Strong';
             } else if (score === 5) {
                 color = 'var(--green)';
-                label = 'Strength: Very Strong! �';
+                label = 'Strength: Very Strong! 💪';
             }
 
             strengthBar.css({
@@ -295,6 +297,10 @@
             const password = $('#passwordInput').val();
             const resultsDiv = $('#passwordResults');
             resultsDiv.empty(); // Clear previous results
+
+            // Show the hidden sections when checkPasswordStrength is called
+            $('.strength-bar-container').show();
+            $('#passwordResults').show();
 
             if (password.length === 0) {
                 resultsDiv.append('<p class="placeholder-text">Enter a password and click "Check Password" to see the strength analysis.</p>');
@@ -439,8 +445,8 @@
         $('#advancedOptionsBtn').on('click', loadAdvancedRules);
 
         // Initial check for empty password input
-        // This will display the placeholder text correctly on load
-        checkPasswordStrength(); 
+        // Removed this call as per user request to hide sections initially
+        // checkPasswordStrength(); 
     });
 </script>
 </body>
