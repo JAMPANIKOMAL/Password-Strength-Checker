@@ -18,6 +18,8 @@
     --purple: #8250df;
     --shadow-dark: rgba(200, 200, 255, 0.1);
     --shadow-light: rgba(27, 31, 35, 0.1);
+    --button-shadow-dark: rgba(0, 0, 0, 0.4); /* Stronger shadow for buttons */
+    --button-shadow-light: rgba(0, 0, 0, 0.15);
 }
 
 /* === Base Styles === */
@@ -67,41 +69,96 @@ body.light-mode { background-color: var(--bg-light); color: var(--text-light); }
 .header-controls { 
     display: flex; 
     align-items: center; 
-    gap: 20px; 
+    gap: 15px; /* Space between toggle and info button */
     flex-wrap: wrap; 
 }
-.control-group { 
-    display: flex; 
-    align-items: center; 
-    gap: 15px; 
-    padding: 8px; 
-    background-color: var(--card-dark); 
-    border: 1px solid var(--border-dark); 
-    border-radius: 8px; 
-}
-body.light-mode .control-group { background-color: var(--card-light); border-color: var(--border-light); }
+/* Removed .control-group styles from header elements as per image */
 
-.control-group.actions button, .control-group.actions a {
-    padding: 8px 12px; font-size: 0.9rem; font-weight: 600; border-radius: 6px; cursor: pointer; transition: all 0.2s; text-decoration: none; display: flex; align-items: center; gap: 6px;
-    transform: scale(1);
+/* General Button Styles (for main action buttons) */
+.btn-main {
+    padding: 10px 18px; /* Slightly more padding */
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 6px; /* Slightly less rounded than before */
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    white-space: nowrap;
+    border: none; /* Buttons in image appear borderless */
+    box-shadow: 0 4px 8px var(--button-shadow-dark); /* Stronger shadow */
+    color: white; /* Default text color for main buttons */
+}
+body.light-mode .btn-main {
+    box-shadow: 0 4px 8px var(--button-shadow-light);
 }
 
-.control-group.actions button:hover, .control-group.actions a:hover {
+.btn-main:hover {
+    transform: translateY(-2px); /* Lift effect */
+    filter: brightness(1.1);
+}
+
+/* Specific button colors */
+.btn-green { background-color: var(--green); }
+.btn-blue { background-color: var(--blue); }
+.btn-red { background-color: var(--red); }
+.btn-orange { background-color: var(--orange); }
+
+/* Header specific button style */
+.btn-header {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    background-color: transparent; /* Transparent background */
+    color: var(--text-muted-dark); /* Muted text color */
+    border: 1px solid var(--border-dark); /* Subtle border */
+}
+body.light-mode .btn-header {
+    color: var(--text-muted-light);
+    border-color: var(--border-light);
+}
+.btn-header:hover {
+    background-color: var(--primary); /* Primary blue on hover */
+    color: white;
+    border-color: var(--primary);
+}
+
+
+/* Apply button within modals */
+.btn-apply {
+    padding: 5px 10px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    background-color: var(--green);
+    color: white;
+    border: 1px solid var(--green);
+    transition: all 0.2s;
+}
+.btn-apply:hover {
     transform: scale(1.05);
     filter: brightness(1.1);
 }
 
-.btn-secondary { background-color: transparent; color: var(--text-muted-dark); border: 1px solid var(--border-dark); }
-body.light-mode .btn-secondary { color: var(--text-muted-light); border-color: var(--border-light); }
-.btn-secondary:hover { background-color: var(--primary); color: white; border-color: var(--primary); }
 
-.btn-start { background-color: var(--green); color: white; border: 1px solid var(--green); }
-.btn-stop { background-color: var(--red); color: white; border: 1px solid var(--red); }
-.btn-save { background-color: var(--blue); color: white; border: 1px solid var(--blue); }
-.btn-clear { background-color: var(--orange); color: white; border: 1px solid var(--orange); }
+/* Disabled button state */
+.btn-main:disabled, .btn-apply:disabled, .btn-header:disabled {
+    background-color: var(--card-dark) !important;
+    color: var(--text-muted-dark) !important;
+    cursor: not-allowed;
+    border-color: var(--border-dark) !important;
+    transform: none !important; /* No transform on disabled */
+    filter: brightness(0.7) !important;
+    box-shadow: none !important; /* No shadow on disabled */
+}
+body.light-mode .btn-main:disabled, body.light-mode .btn-apply:disabled, body.light-mode .btn-header:disabled {
+    background-color: #f6f8fa !important;
+    color: var(--text-muted-light) !important;
+    border-color: var(--border-light) !important;
+}
 
-.control-group button:disabled { background-color: var(--card-dark) !important; color: var(--text-muted-dark) !important; cursor: not-allowed; border-color: var(--border-dark) !important; transform: scale(1) !important; filter: brightness(0.7) !important; }
-body.light-mode .control-group button:disabled { background-color: #f6f8fa !important; color: var(--text-muted-light) !important; border-color: var(--border-light) !important; }
 
 /* === Theme Toggle Switch === */
 .toggle-switch { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; }
@@ -134,6 +191,7 @@ body.light-mode .slider:before { background-color: var(--text-muted-light); }
     max-width: 500px; /* Limit width for better readability */
     box-sizing: border-box;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 5px 15px var(--shadow-dark); /* Subtle card shadow */
 }
 .card:hover {
     transform: translateY(-5px);
@@ -141,6 +199,7 @@ body.light-mode .slider:before { background-color: var(--text-muted-light); }
 }
 body.light-mode .card { background: var(--card-light); border: 1px solid var(--border-light); }
 body.light-mode .card:hover { box-shadow: 0 10px 20px var(--shadow-light); }
+
 
 .password-input-section {
     display: flex;
@@ -199,16 +258,6 @@ body.light-mode .icon-btn {
 .icon-btn svg {
     width: 20px; /* Adjust icon size */
     height: 20px;
-}
-
-#checkPasswordBtn {
-    padding: 12px 20px;
-    font-size: 1rem;
-    font-weight: 600;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s;
-    white-space: nowrap; /* Prevent button text from wrapping */
 }
 
 /* Strength Bar Styles */
@@ -306,16 +355,12 @@ body.light-mode .placeholder-text {
     gap: 10px; /* Space between buttons */
 }
 .advanced-options-section .info-button {
-    padding: 8px 12px; /* Adjust padding for a smaller 'i' button */
-    font-size: 0.9rem;
-    font-weight: 600;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.2s;
+    padding: 10px 18px; /* Match btn-main padding */
+    font-size: 1rem; /* Match btn-main font size */
 }
 
 
-/* === Modal Styles (reused from SIEM project) === */
+/* === Modal Styles === */
 .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.6); animation: fadeIn 0.3s; }
 .modal-content { background-color: var(--card-dark); margin: 10% auto; padding: 20px; border: 1px solid var(--border-dark); width: 80%; max-width: 600px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
 body.light-mode .modal-content { background-color: var(--card-light); border-color: var(--border-light); }
@@ -329,15 +374,6 @@ body.light-mode .modal-header { border-color: var(--border-light); }
 .input-group input { flex-grow: 1; padding: 8px; border-radius: 6px; border: 1px solid var(--border-dark); background: var(--bg-dark); color: var(--text-dark); }
 body.light-mode .input-group input { background: var(--bg-light); color: var(--text-light); border-color: var(--border-light); }
 
-.add-btn, .apply-rule-btn, .apply-char-rules-btn, .custom-alert-ok-button { 
-    padding: 5px 10px; font-size: 1rem; font-weight: bold; border-radius: 6px; cursor: pointer; 
-    background-color: var(--green); color: white; border: 1px solid var(--green); 
-    transition: all 0.2s;
-}
-.add-btn:hover, .apply-rule-btn:hover, .apply-char-rules-btn:hover, .custom-alert-ok-button:hover {
-    transform: scale(1.05);
-    filter: brightness(1.1);
-}
 
 .char-type-group { /* Replaced checkbox-group for number inputs */
     display: flex;
@@ -378,10 +414,7 @@ body.light-mode .char-type-group input[type="number"] {
         width: 100%;
         justify-content: space-between;
     }
-    .control-group {
-        width: 100%;
-        justify-content: center;
-    }
+    /* Removed .control-group styles from header elements */
     .password-input-section {
         flex-direction: column;
     }

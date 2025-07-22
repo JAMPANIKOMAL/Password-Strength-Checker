@@ -22,19 +22,17 @@
         </div>
         
         <div class="header-controls">
-            <div class="control-group">
-                <div class="toggle-switch">
-                    <span>Light</span>
-                    <label class="switch">
-                        <input type="checkbox" id="themeToggle" checked>
-                        <span class="slider"></span>
-                    </label>
-                    <span>Dark</span>
-                </div>
+            <!-- Theme Toggle -->
+            <div class="toggle-switch">
+                <span>Light</span>
+                <label class="switch">
+                    <input type="checkbox" id="themeToggle" checked>
+                    <span class="slider"></span>
+                </label>
+                <span>Dark</span>
             </div>
-            <div class="control-group actions">
-                <button id="infoBtn" class="btn-secondary">ⓘ Info</button>
-            </div>
+            <!-- Info Button -->
+            <button id="infoBtn" class="btn-header">ⓘ Info</button>
         </div>
     </div>
 
@@ -52,7 +50,7 @@
                     </svg>
                 </button>
             </div>
-            <button id="checkPasswordBtn" class="btn-start">Check Password</button>
+            <button id="checkPasswordBtn" class="btn-main btn-green">Check Password</button>
         </div>
 
         <div class="strength-bar-container card">
@@ -66,8 +64,8 @@
         </div>
 
         <div class="advanced-options-section">
-            <button id="advancedOptionsBtn" class="btn-secondary">⚙️ Advanced Options</button>
-            <button id="advancedOptionsInfoBtn" class="btn-secondary info-button">ⓘ</button>
+            <button id="advancedOptionsBtn" class="btn-main btn-blue">⚙️ Advanced Options</button>
+            <button id="advancedOptionsInfoBtn" class="btn-main btn-blue info-button">ⓘ</button>
         </div>
     </div>
 </div>
@@ -100,7 +98,7 @@
                 <h3>Minimum Length</h3>
                 <div class="input-group">
                     <input type="number" id="minLengthInput" value="8" min="1">
-                    <button class="add-btn apply-rule-btn" data-rule="minLength">Apply</button>
+                    <button class="btn-apply btn-green" data-rule="minLength">Apply</button>
                 </div>
             </div>
 
@@ -112,7 +110,7 @@
                     <label>Numbers (0-9): <input type="number" id="requireNumbers" value="1" min="0"></label>
                     <label>Special Characters (!@#$...): <input type="number" id="requireSpecial" value="1" min="0"></label>
                 </div>
-                <button class="btn-start apply-char-rules-btn">Apply Character Rules</button>
+                <button class="btn-main btn-green apply-char-rules-btn">Apply Character Rules</button>
             </div>
         </div>
     </div>
@@ -146,7 +144,7 @@
         <div class="modal-body">
             <p id="customAlertMessage"></p>
             <div style="text-align: right; margin-top: 20px;">
-                <button class="btn-start custom-alert-ok-button">OK</button>
+                <button class="btn-main btn-green custom-alert-ok-button">OK</button>
             </div>
         </div>
     </div>
@@ -346,7 +344,7 @@
             $('#requireSpecial').val(currentRules.requireSpecial);
         };
 
-        $('.apply-rule-btn').on('click', function() {
+        $('.btn-apply').on('click', function() { // Changed from .apply-rule-btn to .btn-apply
             const ruleType = $(this).data('rule');
             if (ruleType === 'minLength') {
                 const value = parseInt($('#minLengthInput').val());
