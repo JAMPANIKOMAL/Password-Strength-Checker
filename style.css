@@ -67,22 +67,19 @@ body.light-mode { background-color: var(--bg-light); color: var(--text-light); }
 .header-controls { 
     display: flex; 
     align-items: center; 
-    gap: 15px; /* Spacing between toggle and info button */
+    gap: 20px; 
     flex-wrap: wrap; 
 }
-
-/* Control Group for other sections (e.g., input section) */
 .control-group { 
-    display: flex; /* Ensure elements inside are flexed */
-    align-items: center;
-    gap: 15px; /* Spacing between toggle and info button */
+    display: flex; 
+    align-items: center; 
+    gap: 15px; 
     padding: 8px; 
     background-color: var(--card-dark); 
     border: 1px solid var(--border-dark); 
     border-radius: 8px; 
 }
 body.light-mode .control-group { background-color: var(--card-light); border-color: var(--border-light); }
-
 
 .control-group.actions button, .control-group.actions a {
     padding: 8px 12px; font-size: 0.9rem; font-weight: 600; border-radius: 6px; cursor: pointer; transition: all 0.2s; text-decoration: none; display: flex; align-items: center; gap: 6px;
@@ -304,37 +301,7 @@ body.light-mode .placeholder-text {
     width: 100%;
     max-width: 500px; /* Match card width */
     text-align: center;
-    display: flex; /* Use flexbox for horizontal alignment */
-    justify-content: center; /* Center the buttons */
-    gap: 10px; /* Space between buttons */
 }
-
-/* Styling for the new info button next to advanced options */
-.info-icon-btn {
-    padding: 8px 12px; /* Match btn-secondary padding */
-    font-size: 0.9rem; /* Match btn-secondary font size */
-    font-weight: 600;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.2s;
-    background-color: transparent;
-    color: var(--text-muted-dark);
-    border: 1px solid var(--border-dark);
-}
-
-body.light-mode .info-icon-btn {
-    color: var(--text-muted-light);
-    border-color: var(--border-light);
-}
-
-.info-icon-btn:hover {
-    background-color: var(--primary);
-    color: white;
-    border-color: var(--primary);
-    transform: scale(1.05);
-    filter: brightness(1.1);
-}
-
 
 /* === Modal Styles (reused from SIEM project) === */
 .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.6); animation: fadeIn 0.3s; }
@@ -359,51 +326,26 @@ body.light-mode .add-rule-form input { background: var(--bg-light); color: var(-
     filter: brightness(1.1);
 }
 
-.input-group-rules {
-    display: grid;
-    grid-template-columns: 1fr; /* Single column by default */
-    gap: 15px;
-}
-
-.rule-input-item {
+.checkbox-group {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 8px;
 }
 
-.rule-input-item label {
-    font-size: 0.95rem;
-    font-weight: 500;
-    color: var(--text-dark);
-}
-body.light-mode .rule-input-item label {
-    color: var(--text-light);
+.checkbox-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
 }
 
-.rule-input-item input[type="number"] {
-    padding: 8px 10px;
-    border-radius: 6px;
-    border: 1px solid var(--border-dark);
-    background: var(--bg-dark);
-    color: var(--text-dark);
-    font-size: 1rem;
-    outline: none;
-    width: 80px; /* Fixed width for number inputs */
+.checkbox-group input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--primary); /* Checkbox color */
 }
-body.light-mode .rule-input-item input[type="number"] {
-    background: var(--bg-light);
-    color: var(--text-light);
-    border-color: var(--border-light);
-}
-
 
 /* Responsive adjustments */
-@media (min-width: 600px) {
-    .input-group-rules {
-        grid-template-columns: 1fr 1fr; /* Two columns on larger screens */
-    }
-}
-
 @media (max-width: 768px) {
     .top-bar {
         flex-direction: column;
@@ -412,23 +354,15 @@ body.light-mode .rule-input-item input[type="number"] {
     .header-controls {
         width: 100%;
         justify-content: space-between;
-        gap: 10px; /* Reduce gap on smaller screens */
     }
-    .toggle-switch, .btn-secondary {
-        flex-grow: 1; /* Allow them to fill space */
-        text-align: center; /* Center text within their new flex item */
+    .control-group {
+        width: 100%;
+        justify-content: center;
     }
     .password-input-section {
         flex-direction: column;
     }
     #checkPasswordBtn {
-        width: 100%;
-    }
-    .advanced-options-section {
-        flex-direction: column; /* Stack buttons vertically on small screens */
-        gap: 10px;
-    }
-    .advanced-options-section button {
         width: 100%;
     }
 }
