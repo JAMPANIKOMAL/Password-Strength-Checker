@@ -67,6 +67,7 @@
 
         <div class="advanced-options-section">
             <button id="advancedOptionsBtn" class="btn-secondary">⚙️ Advanced Options</button>
+            <button id="advancedOptionsInfoBtn" class="btn-secondary info-button">ⓘ</button>
         </div>
     </div>
 </div>
@@ -93,24 +94,59 @@
             <span class="close-button advanced-close-button">&times;</span>
         </div>
         <div class="modal-body">
-            <p>Customize the rules for your password here. (Functionality to be added)</p>
-            <!-- Example rule setting, will be dynamic -->
+            <p>Customize the rules for your password here.</p>
+            
             <div class="rule-section">
                 <h3>Minimum Length</h3>
-                <div class="add-rule-form">
+                <div class="input-group">
                     <input type="number" id="minLengthInput" value="8" min="1">
                     <button class="add-btn apply-rule-btn" data-rule="minLength">Apply</button>
                 </div>
             </div>
+
             <div class="rule-section">
-                <h3>Required Character Types</h3>
-                <div class="checkbox-group">
-                    <label><input type="checkbox" id="requireUppercase" checked> Uppercase Letters (A-Z)</label>
-                    <label><input type="checkbox" id="requireLowercase" checked> Lowercase Letters (a-z)</label>
-                    <label><input type="checkbox" id="requireNumbers" checked> Numbers (0-9)</label>
-                    <label><input type="checkbox" id="requireSpecial" checked> Special Characters (!@#$...)</label>
+                <h3>Required Character Types (Minimum Count)</h3>
+                <div class="char-type-group">
+                    <label>Uppercase Letters (A-Z): <input type="number" id="requireUppercase" value="1" min="0"></label>
+                    <label>Lowercase Letters (a-z): <input type="number" id="requireLowercase" value="1" min="0"></label>
+                    <label>Numbers (0-9): <input type="number" id="requireNumbers" value="1" min="0"></label>
+                    <label>Special Characters (!@#$...): <input type="number" id="requireSpecial" value="1" min="0"></label>
                 </div>
                 <button class="btn-start apply-char-rules-btn">Apply Character Rules</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Advanced Options Info Modal -->
+<div id="advancedOptionsInfoModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>About Advanced Options</h2>
+            <span class="close-button advanced-info-close-button">&times;</span>
+        </div>
+        <div class="modal-body">
+            <p>The Advanced Options allow you to customize the criteria used to evaluate password strength. You can set:</p>
+            <ul>
+                <li><strong>Minimum Length:</strong> The shortest acceptable length for a password.</li>
+                <li><strong>Required Character Types:</strong> The minimum number of uppercase letters, lowercase letters, numbers, and special characters that must be present in the password.</li>
+            </ul>
+            <p>Adjust these settings to match your specific security requirements. Changes made here will immediately affect how passwords are checked.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Custom Alert Modal -->
+<div id="customAlertModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="customAlertTitle">Message</h2>
+            <span class="close-button custom-alert-close-button">&times;</span>
+        </div>
+        <div class="modal-body">
+            <p id="customAlertMessage"></p>
+            <div style="text-align: right; margin-top: 20px;">
+                <button class="btn-start custom-alert-ok-button">OK</button>
             </div>
         </div>
     </div>
@@ -119,7 +155,7 @@
 <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
 <script>
     $(document).ready(function () {
-        // --- Theme Toggle Logic (reused from SIEM project) ---
+        // --- Theme Toggle Logic ---
         const applyTheme = (theme) => {
             $('body').removeClass('dark-mode light-mode').addClass(theme);
             localStorage.setItem('theme', theme);
@@ -142,14 +178,37 @@
             applyTheme('dark-mode');
         }
 
+        // --- Custom Alert/Message Box Logic ---
+        const customAlertModal = $('#customAlertModal');
+        const customAlertTitle = $('#customAlertTitle');
+        const customAlertMessage = $('#customAlertMessage');
+
+        const showAlert = (title, message) => {
+            customAlertTitle.text(title);
+            customAlertMessage.text(message);
+            customAlertModal.show();
+        };
+
+        $('.custom-alert-close-button, .custom-alert-ok-button').on('click', () => customAlertModal.hide());
+        $(window).on('click', (event) => {
+            if ($(event.target).is(customAlertModal)) {
+                customAlertModal.hide();
+            }
+        });
+
         // --- Modals Logic ---
         const infoModal = $('#infoModal');
         const advancedOptionsModal = $('#advancedOptionsModal');
+        const advancedOptionsInfoModal = $('#advancedOptionsInfoModal'); // New modal
 
         $('#infoBtn').on('click', () => infoModal.show());
         $('.info-close-button').on('click', () => infoModal.hide());
+
         $('#advancedOptionsBtn').on('click', () => advancedOptionsModal.show());
         $('.advanced-close-button').on('click', () => advancedOptionsModal.hide());
+
+        $('#advancedOptionsInfoBtn').on('click', () => advancedOptionsInfoModal.show()); // Show new info modal
+        $('.advanced-info-close-button').on('click', () => advancedOptionsInfoModal.hide()); // Close new info modal
 
         // Close modals when clicking outside
         $(window).on('click', (event) => {
@@ -158,6 +217,9 @@
             }
             if ($(event.target).is(advancedOptionsModal)) {
                 advancedOptionsModal.hide();
+            }
+            if ($(event.target).is(advancedOptionsInfoModal)) { // For new modal
+                advancedOptionsInfoModal.hide();
             }
         });
 
@@ -181,10 +243,10 @@
         // --- Password Checking Logic ---
         let currentRules = {
             minLength: 8,
-            requireUppercase: true,
-            requireLowercase: true,
-            requireNumbers: true,
-            requireSpecial: true
+            requireUppercase: 1,
+            requireLowercase: 1,
+            requireNumbers: 1,
+            requireSpecial: 1
         };
 
         const updateStrengthBar = (score) => {
@@ -192,7 +254,7 @@
             const strengthLabel = $('#strengthLabel');
             let width = (score / 5) * 100; // Assuming 5 checks for now
             let color = 'var(--red)';
-            let label = 'Strength: Very Weak';
+            let label = 'Strength: N/A';
 
             if (score === 0) {
                 width = 0;
@@ -233,43 +295,38 @@
             }
 
             let passedChecksCount = 0;
-            const checks = [
-                {
-                    name: `Minimum length of ${currentRules.minLength} characters`,
-                    check: (pwd) => pwd.length >= currentRules.minLength
-                },
-                {
-                    name: 'At least one uppercase letter (A-Z)',
-                    check: (pwd) => currentRules.requireUppercase ? /[A-Z]/.test(pwd) : true
-                },
-                {
-                    name: 'At least one lowercase letter (a-z)',
-                    check: (pwd) => currentRules.requireLowercase ? /[a-z]/.test(pwd) : true
-                },
-                {
-                    name: 'At least one number (0-9)',
-                    check: (pwd) => currentRules.requireNumbers ? /[0-9]/.test(pwd) : true
-                },
-                {
-                    name: 'At least one special character (!@#$...)',
-                    check: (pwd) => currentRules.requireSpecial ? /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~` ]/.test(pwd) : true
-                }
-            ];
+            
+            // Rule 1: Minimum Length
+            const minLengthPassed = password.length >= currentRules.minLength;
+            resultsDiv.append(`<p class="${minLengthPassed ? 'success-text' : 'error-text'}">${minLengthPassed ? '✔️' : '❌'} Minimum length of ${currentRules.minLength} characters</p>`);
+            if (minLengthPassed) passedChecksCount++;
 
-            let allChecksPassed = true;
-            checks.forEach(rule => {
-                const passed = rule.check(password);
-                const icon = passed ? '✔️' : '❌';
-                const className = passed ? 'success-text' : 'error-text';
-                resultsDiv.append(`<p class="${className}">${icon} ${rule.name}</p>`);
-                if (passed) {
-                    passedChecksCount++;
-                } else {
-                    allChecksPassed = false;
-                }
-            });
+            // Rule 2: Uppercase Letters
+            const uppercaseCount = (password.match(/[A-Z]/g) || []).length;
+            const uppercasePassed = uppercaseCount >= currentRules.requireUppercase;
+            resultsDiv.append(`<p class="${uppercasePassed ? 'success-text' : 'error-text'}">${uppercasePassed ? '✔️' : '❌'} At least ${currentRules.requireUppercase} uppercase letter(s) (found: ${uppercaseCount})</p>`);
+            if (uppercasePassed) passedChecksCount++;
 
-            if (allChecksPassed) {
+            // Rule 3: Lowercase Letters
+            const lowercaseCount = (password.match(/[a-z]/g) || []).length;
+            const lowercasePassed = lowercaseCount >= currentRules.requireLowercase;
+            resultsDiv.append(`<p class="${lowercasePassed ? 'success-text' : 'error-text'}">${lowercasePassed ? '✔️' : '❌'} At least ${currentRules.requireLowercase} lowercase letter(s) (found: ${lowercaseCount})</p>`);
+            if (lowercasePassed) passedChecksCount++;
+
+            // Rule 4: Numbers
+            const numberCount = (password.match(/[0-9]/g) || []).length;
+            const numbersPassed = numberCount >= currentRules.requireNumbers;
+            resultsDiv.append(`<p class="${numbersPassed ? 'success-text' : 'error-text'}">${numbersPassed ? '✔️' : '❌'} At least ${currentRules.requireNumbers} number(s) (found: ${numberCount})</p>`);
+            if (numbersPassed) passedChecksCount++;
+
+            // Rule 5: Special Characters
+            const specialCharCount = (password.match(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~` ]/g) || []).length;
+            const specialPassed = specialCharCount >= currentRules.requireSpecial;
+            resultsDiv.append(`<p class="${specialPassed ? 'success-text' : 'error-text'}">${specialPassed ? '✔️' : '❌'} At least ${currentRules.requireSpecial} special character(s) (found: ${specialCharCount})</p>`);
+            if (specialPassed) passedChecksCount++;
+
+
+            if (passedChecksCount === 5) { // All 5 core checks passed
                 resultsDiv.prepend('<p class="overall-strength success-text">Password is Strong! 💪</p>');
             } else {
                 resultsDiv.prepend('<p class="overall-strength error-text">Password needs improvement. 😟</p>');
@@ -283,21 +340,21 @@
         // --- Advanced Options Logic ---
         const loadAdvancedRules = () => {
             $('#minLengthInput').val(currentRules.minLength);
-            $('#requireUppercase').prop('checked', currentRules.requireUppercase);
-            $('#requireLowercase').prop('checked', currentRules.requireLowercase);
-            $('#requireNumbers').prop('checked', currentRules.requireNumbers);
-            $('#requireSpecial').prop('checked', currentRules.requireSpecial);
+            $('#requireUppercase').val(currentRules.requireUppercase);
+            $('#requireLowercase').val(currentRules.requireLowercase);
+            $('#requireNumbers').val(currentRules.requireNumbers);
+            $('#requireSpecial').val(currentRules.requireSpecial);
         };
 
         $('.apply-rule-btn').on('click', function() {
             const ruleType = $(this).data('rule');
             if (ruleType === 'minLength') {
                 const value = parseInt($('#minLengthInput').val());
-                if (!isNaN(value) && value > 0) {
+                if (!isNaN(value) && value >= 1) { // Minimum length must be at least 1
                     currentRules.minLength = value;
-                    alert('Minimum length rule applied!');
+                    showAlert('Rule Applied', `Minimum length rule applied: ${value} characters.`);
                 } else {
-                    alert('Please enter a valid minimum length (a positive number).');
+                    showAlert('Invalid Input', 'Please enter a valid minimum length (a positive number).');
                 }
             }
             checkPasswordStrength(); // Re-check password with new rules
@@ -305,11 +362,26 @@
         });
 
         $('.apply-char-rules-btn').on('click', function() {
-            currentRules.requireUppercase = $('#requireUppercase').is(':checked');
-            currentRules.requireLowercase = $('#requireLowercase').is(':checked');
-            currentRules.requireNumbers = $('#requireNumbers').is(':checked');
-            currentRules.requireSpecial = $('#requireSpecial').is(':checked');
-            alert('Character type rules applied!');
+            const uppercase = parseInt($('#requireUppercase').val());
+            const lowercase = parseInt($('#requireLowercase').val());
+            const numbers = parseInt($('#requireNumbers').val());
+            const special = parseInt($('#requireSpecial').val());
+
+            let isValid = true;
+            if (isNaN(uppercase) || uppercase < 0) isValid = false;
+            if (isNaN(lowercase) || lowercase < 0) isValid = false;
+            if (isNaN(numbers) || numbers < 0) isValid = false;
+            if (isNaN(special) || special < 0) isValid = false;
+
+            if (isValid) {
+                currentRules.requireUppercase = uppercase;
+                currentRules.requireLowercase = lowercase;
+                currentRules.requireNumbers = numbers;
+                currentRules.requireSpecial = special;
+                showAlert('Rules Applied', 'Character type rules applied!');
+            } else {
+                showAlert('Invalid Input', 'Please enter valid non-negative numbers for all character type rules.');
+            }
             checkPasswordStrength(); // Re-check password with new rules
             advancedOptionsModal.hide(); // Hide modal after applying
         });

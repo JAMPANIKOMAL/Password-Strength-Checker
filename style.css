@@ -301,7 +301,19 @@ body.light-mode .placeholder-text {
     width: 100%;
     max-width: 500px; /* Match card width */
     text-align: center;
+    display: flex; /* Make buttons side-by-side */
+    justify-content: center;
+    gap: 10px; /* Space between buttons */
 }
+.advanced-options-section .info-button {
+    padding: 8px 12px; /* Adjust padding for a smaller 'i' button */
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
 
 /* === Modal Styles (reused from SIEM project) === */
 .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.6); animation: fadeIn 0.3s; }
@@ -313,36 +325,47 @@ body.light-mode .modal-header { border-color: var(--border-light); }
 .close-button:hover { color: var(--red); }
 .modal-body { display: flex; flex-direction: column; gap: 20px; }
 .rule-section { display: flex; flex-direction: column; gap: 10px; }
-.add-rule-form { display: flex; gap: 5px; }
-.add-rule-form input { flex-grow: 1; padding: 8px; border-radius: 6px; border: 1px solid var(--border-dark); background: var(--bg-dark); color: var(--text-dark); }
-body.light-mode .add-rule-form input { background: var(--bg-light); color: var(--text-light); border-color: var(--border-light); }
-.add-btn, .apply-rule-btn, .apply-char-rules-btn { 
+.input-group { display: flex; gap: 5px; } /* For minLength input and button */
+.input-group input { flex-grow: 1; padding: 8px; border-radius: 6px; border: 1px solid var(--border-dark); background: var(--bg-dark); color: var(--text-dark); }
+body.light-mode .input-group input { background: var(--bg-light); color: var(--text-light); border-color: var(--border-light); }
+
+.add-btn, .apply-rule-btn, .apply-char-rules-btn, .custom-alert-ok-button { 
     padding: 5px 10px; font-size: 1rem; font-weight: bold; border-radius: 6px; cursor: pointer; 
     background-color: var(--green); color: white; border: 1px solid var(--green); 
     transition: all 0.2s;
 }
-.add-btn:hover, .apply-rule-btn:hover, .apply-char-rules-btn:hover {
+.add-btn:hover, .apply-rule-btn:hover, .apply-char-rules-btn:hover, .custom-alert-ok-button:hover {
     transform: scale(1.05);
     filter: brightness(1.1);
 }
 
-.checkbox-group {
+.char-type-group { /* Replaced checkbox-group for number inputs */
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
 
-.checkbox-group label {
+.char-type-group label {
     display: flex;
     align-items: center;
     gap: 8px;
     cursor: pointer;
+    justify-content: space-between; /* Distribute label text and input */
 }
 
-.checkbox-group input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-    accent-color: var(--primary); /* Checkbox color */
+.char-type-group input[type="number"] {
+    width: 60px; /* Adjust width for number input */
+    padding: 5px 8px;
+    border-radius: 6px;
+    border: 1px solid var(--border-dark);
+    background: var(--bg-dark);
+    color: var(--text-dark);
+    text-align: center;
+}
+body.light-mode .char-type-group input[type="number"] {
+    background: var(--bg-light);
+    color: var(--text-light);
+    border-color: var(--border-light);
 }
 
 /* Responsive adjustments */
@@ -364,5 +387,23 @@ body.light-mode .add-rule-form input { background: var(--bg-light); color: var(-
     }
     #checkPasswordBtn {
         width: 100%;
+    }
+    .advanced-options-section {
+        flex-direction: column; /* Stack buttons on small screens */
+        align-items: center;
+    }
+    .advanced-options-section button {
+        width: 100%; /* Full width for stacked buttons */
+        max-width: 250px; /* Limit individual button width */
+    }
+    .char-type-group label {
+        flex-direction: column; /* Stack label text and input on small screens */
+        align-items: flex-start;
+        gap: 4px;
+    }
+    .char-type-group input[type="number"] {
+        width: 100%; /* Make number input full width in stacked layout */
+        max-width: 100px; /* Or a reasonable max-width */
+        text-align: left; /* Align text left when wider */
     }
 }
