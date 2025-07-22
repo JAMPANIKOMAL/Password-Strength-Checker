@@ -69,6 +69,7 @@ body.light-mode { background-color: var(--bg-light); color: var(--text-light); }
     align-items: center; 
     gap: 20px; 
     flex-wrap: wrap; 
+    margin-left: auto; /* Push to the right */
 }
 .control-group { 
     display: flex; 
