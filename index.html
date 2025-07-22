@@ -16,13 +16,8 @@
         <div class="logo-title">
             <!-- Updated Password Field with Key Symbol SVG -->
             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="logo-icon">
-                <path d="M19 11H5C3.89543 11 3 11.8954 3 13V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V13C21 11.8954 20.1046 11 19 11Z" stroke="#58a6ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M7 16H9" stroke="#58a6ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M11 16H13" stroke="#58a6ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M15 16H17" stroke="#58a6ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M12 3V6" stroke="#58a6ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M15 6L12 9L9 6" stroke="#58a6ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <circle cx="12" cy="6" r="2" stroke="#58a6ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M16 12C16 14.2091 14.2091 16 12 16C9.79086 16 8 14.2091 8 12C8 9.79086 9.79086 8 12 8C14.2091 8 16 9.79086 16 12Z" stroke="#58a6ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2ZM12 4C16.4183 4 20 7.58172 20 12C20 16.4183 16.4183 20 12 20C7.58172 20 4 16.4183 4 12C4 7.58172 7.58172 4 12 4Z" stroke="#58a6ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
             <h1 id="dashboardTitle">Password Strength Checker</h1>
         </div>
@@ -50,10 +45,12 @@
                 <button id="togglePasswordVisibility" class="icon-btn">
                     <!-- Eye icon SVG - Initially show eyeClosed as password is visible -->
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path id="eyeOpen" style="display:none;" d="M2 12S6 4 12 4S22 12 22 12S18 20 12 20S2 12 2 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <circle id="eyeOpenCircle" style="display:none;" cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path id="eyeClosed" d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-5.4 0-9.94-7-9.94-7A9.01 9.01 0 0 1 8 6.06M2 2L22 2M11.58 3.58A10.07 10.07 0 0 1 12 4c5.4 0 9.94 7 9.94 7a9.01 9.01 0 0 1-1.25 1.72M16 16.01L8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <line id="eyeClosedLine" x1="1" y1="1" x2="23" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <!-- New eye-open icon (visible when password is shown) -->
+                        <path id="eyeOpen" d="M2 12S6 4 12 4S22 12 22 12S18 20 12 20S2 12 2 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle id="eyeOpenCircle" cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <!-- New eye-closed icon (visible when password is hidden) -->
+                        <path id="eyeClosed" style="display:none;" d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-5.4 0-9.94-7-9.94-7A9.01 9.01 0 0 1 8 6.06M2 2L22 2M11.58 3.58A10.07 10.07 0 0 1 12 4c5.4 0 9.94 7 9.94 7a9.01 9.01 0 0 1-1.25 1.72M16 16.01L8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <line id="eyeClosedLine" style="display:none;" x1="1" y1="1" x2="23" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 </button>
             </div>
