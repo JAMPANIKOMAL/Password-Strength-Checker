@@ -61,7 +61,8 @@ body.light-mode { background-color: var(--bg-light); color: var(--text-light); }
 }
 .logo-title { display: flex; align-items: center; gap: 12px; }
 .logo-title h1 { font-size: 1.6rem; margin: 0; white-space: nowrap; }
-.logo-icon { transition: transform 0.5s; }
+.logo-icon { transition: transform 0.5s, stroke 0.3s; } /* Smooth transition for icon */
+.logo-icon:hover { transform: scale(1.1); stroke: var(--primary); } /* Subtle hover effect, changed to primary blue */
 /* No active spin animation for this project, but keeping class for consistency */
 .logo-icon.active { animation: spin 2s linear infinite; } 
 @keyframes spin { 100% { transform: rotate(360deg); } }
@@ -111,18 +112,21 @@ body.light-mode .btn-main {
     border-radius: 6px;
     cursor: pointer;
     transition: all 0.2s;
-    background-color: transparent; /* Transparent background */
-    color: var(--text-muted-dark); /* Muted text color */
-    border: 1px solid var(--border-dark); /* Subtle border */
+    background-color: var(--blue); /* Changed to blue for consistency */
+    color: white; /* Changed text to white for consistency */
+    border: none; /* Removed border */
+    box-shadow: 0 4px 8px var(--button-shadow-dark); /* Added shadow for consistency */
 }
 body.light-mode .btn-header {
-    color: var(--text-muted-light);
-    border-color: var(--border-light);
+    box-shadow: 0 4px 8px var(--button-shadow-light);
 }
 .btn-header:hover {
     background-color: var(--primary); /* Primary blue on hover */
     color: white;
-    border-color: var(--primary);
+    border-color: var(--primary); /* Keep border-color for consistency with primary */
+    transform: translateY(-2px); /* Lift effect */
+    filter: brightness(1.1); /* Brightness effect */
+    box-shadow: 0 6px 12px var(--button-shadow-dark); /* More pronounced shadow on hover */
 }
 
 
@@ -225,10 +229,11 @@ body.light-mode .card:hover { box-shadow: 0 10px 20px var(--shadow-light); }
     color: var(--text-dark);
     font-size: 1rem;
     outline: none;
-    transition: border-color 0.2s;
+    transition: border-color 0.2s, box-shadow 0.2s; /* Added box-shadow transition */
 }
 #passwordInput:focus {
     border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.3); /* Focus ring */
 }
 body.light-mode #passwordInput {
     background: var(--bg-light);
@@ -246,11 +251,12 @@ body.light-mode #passwordInput {
     display: flex;
     align-items: center;
     color: var(--text-muted-dark); /* Icon color */
-    transition: color 0.2s;
+    transition: color 0.2s, transform 0.1s ease-in-out; /* Added transform transition */
 }
 
 .icon-btn:hover {
     color: var(--primary);
+    transform: scale(1.1); /* Subtle scale on hover */
 }
 body.light-mode .icon-btn {
     color: var(--text-muted-light);
@@ -366,7 +372,7 @@ body.light-mode .placeholder-text {
     border: none;
     box-shadow: 0 4px 8px var(--button-shadow-dark);
     color: white;
-    background-color: var(--blue);
+    background-color: var(--blue); /* Ensure this is blue */
 }
 
 body.light-mode .advanced-options-section .info-button {
@@ -385,13 +391,26 @@ body.light-mode .advanced-options-section .info-button {
 body.light-mode .modal-content { background-color: var(--card-light); border-color: var(--border-light); }
 .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-dark); padding-bottom: 10px; margin-bottom: 20px; }
 body.light-mode .modal-header { border-color: var(--border-light); }
-.close-button { font-size: 28px; font-weight: bold; cursor: pointer; transition: color 0.2s; }
-.close-button:hover { color: var(--red); }
+.close-button { font-size: 28px; font-weight: bold; cursor: pointer; transition: color 0.2s, transform 0.1s; } /* Added transform transition */
+.close-button:hover { color: var(--red); transform: scale(1.1); } /* Subtle scale on hover */
 .modal-body { display: flex; flex-direction: column; gap: 20px; }
 .rule-section { display: flex; flex-direction: column; gap: 10px; }
 .input-group { display: flex; gap: 5px; } /* For minLength input and button */
-.input-group input { flex-grow: 1; padding: 8px; border-radius: 6px; border: 1px solid var(--border-dark); background: var(--bg-dark); color: var(--text-dark); }
+.input-group input { 
+    flex-grow: 1; 
+    padding: 8px; 
+    border-radius: 6px; 
+    border: 1px solid var(--border-dark); 
+    background: var(--bg-dark); 
+    color: var(--text-dark); 
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s; /* Added box-shadow transition */
+}
 body.light-mode .input-group input { background: var(--bg-light); color: var(--text-light); border-color: var(--border-light); }
+.input-group input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.3); /* Focus ring */
+}
 
 
 .char-type-group { /* Replaced checkbox-group for number inputs */
@@ -416,11 +435,16 @@ body.light-mode .input-group input { background: var(--bg-light); color: var(--t
     background: var(--bg-dark);
     color: var(--text-dark);
     text-align: center;
+    transition: border-color 0.2s, box-shadow 0.2s; /* Added box-shadow transition */
 }
 body.light-mode .char-type-group input[type="number"] {
     background: var(--bg-light);
     color: var(--text-light);
     border-color: var(--border-light);
+}
+.char-type-group input[type="number"]:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.3); /* Focus ring */
 }
 
 /* Responsive adjustments */
