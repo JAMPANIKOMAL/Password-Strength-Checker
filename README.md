@@ -2,19 +2,18 @@
 
 A simple, privacy-focused web app to help users create strong passwords by checking them against customizable criteria. All password analysis happens locally—your data is never sent or stored.
 
-[https://jampanikomal.github.io/Password-Strength-Checker/](https://jampanikomal.github.io/Password-Strength-Checker/)
-
+**Live Demo:** [jampanikomal.github.io/Password-Strength-Checker](https://jampanikomal.github.io/Password-Strength-Checker/)
 
 ## ✨ Features
 
 - Enter your password and click "Check Password" for analysis.
 - **Animated Rule Display:** Rules are checked and shown one by one with smooth animation; the strength bar updates progressively.
 - **Customizable Rules:** Set requirements for:
-    - Minimum length
-    - Uppercase letters
-    - Lowercase letters
-    - Digits
-    - Special characters
+     - Minimum length
+     - Uppercase letters
+     - Lowercase letters
+     - Digits
+     - Special characters
 - **Privacy-Focused:** All logic runs in your browser; passwords are never transmitted or stored.
 - **Password Visibility Toggle:** Show/hide your password with an eye icon (visible by default).
 - **Dynamic Strength Bar:** Visual indicator updates as rules are checked.
@@ -31,26 +30,26 @@ A simple, privacy-focused web app to help users create strong passwords by check
 ## 📦 Installation and Setup
 
 1. **Clone the Repository:**
-     ```sh
-     git clone https://github.com/YOUR_USERNAME/Password-Strength-Checker.git
-     cd Password-Strength-Checker
-     ```
-     *(Replace `YOUR_USERNAME` with your GitHub username)*
+      ```sh
+      git clone https://github.com/YOUR_USERNAME/Password-Strength-Checker.git
+      cd Password-Strength-Checker
+      ```
+      *(Replace `YOUR_USERNAME` with your GitHub username)*
 
 2. **Download jQuery:**
-     - Get [jquery-3.7.0.min.js](https://code.jquery.com/jquery-3.7.0.min.js) and save it in your project folder.
+      - Get [jquery-3.7.0.min.js](https://code.jquery.com/jquery-3.7.0.min.js) and save it in your project folder.
 
 3. **Run Locally:**
-     - Open `index.html` in your browser, or use a local server for best results.
+      - Open `index.html` in your browser, or use a local server for best results.
 
-     **Using VS Code Live Server:**
-     - Install the "Live Server" extension, right-click `index.html`, and select "Open with Live Server."
+      **Using VS Code Live Server:**
+      - Install the "Live Server" extension, right-click `index.html`, and select "Open with Live Server."
 
-     **Using Python HTTP Server:**
-     ```sh
-     python -m http.server 8000
-     ```
-     - Visit [http://localhost:8000/](http://localhost:8000/) in your browser.
+      **Using Python HTTP Server:**
+      ```sh
+      python -m http.server 8000
+      ```
+      - Visit [http://localhost:8000/](http://localhost:8000/) in your browser.
 
 ## 💡 Usage
 
